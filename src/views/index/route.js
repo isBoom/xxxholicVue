@@ -33,7 +33,7 @@ const routes = [{
             import ( /* webpackChunkName: "about" */ './Movie.vue')
     },
     {
-        path: '/funcy',
+        path: '/funny',
         name: 'Funny',
         meta: {
             keepAlive: true
@@ -51,6 +51,16 @@ const routes = [{
         //component: Home
         component: () =>
             import ( /* webpackChunkName: "about" */ './Other.vue')
+    },
+    {
+        path: '/video/:id',
+        name: 'Video',
+        meta: {
+            keepAlive: false
+        },
+        //component: Home
+        component: () =>
+            import ( /* webpackChunkName: "about" */ './Video.vue')
     },
 ]
 

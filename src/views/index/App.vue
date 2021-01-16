@@ -2,11 +2,11 @@
   <div id="app">
     <HomeMenu />
     <div class="appContent">
-      <div class="">
-        <keep-alive>
-          <router-view  />
+       <!-- <router-view /> -->
+        <keep-alive exclude ="video">
+          <router-view />
         </keep-alive>
-      </div>
+        <div style="clear:both"></div>
     </div>
     <Copyright />
   </div>
@@ -29,23 +29,22 @@ export default {
     HomeMenu,
     Copyright
   },
-  created() {
-    
-  }
 }
+
 </script>
 
-<style>
-
-</style>
 <style lang="scss" scoped>
 #app {
   margin: 0 auto;
   .appContent {
-    width: 1450px;
+    width: 1200px;
     min-height: 700px;
     margin: 0 auto;
   }
+  
+}
+.appContent{
+  padding-top: 2%;
 }
 
 

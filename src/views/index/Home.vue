@@ -1,33 +1,42 @@
 <template>
  <div class="home">
     <VideoBox class="videoBox"/> 
-    <VideoHot class="videoHot"/>
+    <VideoRank class="videoRank"/>
  </div>
 </template>
 <script>
 import VideoBox from '@/components/VideoBox.vue';
-import VideoHot from '@/components/VideoHot.vue';
+import VideoRank from '@/components/VideoRank.vue';
 export default {
     name: "home",
     components: {
         VideoBox,
-        VideoHot
+        VideoRank
     },
     methods:{
     },
     created(){
-    }
+    },
+    deactivated(){
+        this.$router.beforeEach((to, from, next) => {
+        if (to.name == "Video"){
+          this.$destroy()
+        }
+        next()
+      })
+    },
 }
 </script>
 <style lang="scss" scoped>
 .home{
   .videoBox{
-    width: 50%;
+    width: 70%;
     float: left;
   }
-  .videoHot{
-    widows: 30%;
+  .videoRank{
+    width: 30%;
     float: left;
   }
 }
+
 </style>

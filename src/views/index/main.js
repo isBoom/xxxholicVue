@@ -11,10 +11,15 @@ Vue.use(vueBeauty)
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI)
-
-
+    //VideoPlayer
+import VideoPlayer from "vue-video-player"
+import "vue-video-player/src/custom-theme.css"
+import "video.js/dist/video-js.css"
+Vue.use(VideoPlayer)
+    //
 new Vue({
     router,
     store,
+    VideoPlayer,
     render: h => h(App)
 }).$mount('#app')

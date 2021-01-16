@@ -14,7 +14,7 @@
                   <div class="home-img-banner">
                     <el-image :src="v.avatar" class="image">
                       <div slot="error" class="image-slot">
-                        <img src="@/static/defaultAvatar.jpg" class="image" />
+                        <img src="@/static/defaultAvatar.png" class="image" />
                       </div>
                     </el-image>
                   </div>
@@ -46,7 +46,7 @@
                     <div class="home-img-banner">
                       <el-image :src="v.avatar" class="image">
                         <div slot="error" class="image-slot">
-                          <img src="@/static/defaultAvatar.jpg" class="image" />
+                          <img src="@/static/defaultAvatar.png" class="image" />
                         </div>
                       </el-image>
                     </div>
@@ -79,6 +79,7 @@ export default {
   name: "homeHot",
   data() {
     return {
+      params:{},
       nbsp: "&#12288;",
       videos: []
     };
@@ -92,8 +93,8 @@ export default {
       let d = date.getDate();
       return y + "-" + MM + "-" + d;
     },
-    getDailyRank() {
-      API.getDailyRank()
+    getVideoRank(params) {
+      API.getVideoRank(params)
         .then(res => {
           this.videos = res.data;
           console.log(res);
@@ -107,81 +108,81 @@ export default {
     }
   },
   created() {
-    this.getDailyRank();
+    this.getVideoRank(this.params);
   }
 };
 </script>
 <style lang="scss" scoped>
 /* 视频详情 显现*/
-.details {
-  position: absolute;
-  background-color: #ffffff;
-  border-radius: 5px;
-  display: none;
-  width: 88%;
-  margin-top: -90px;
-  padding: 10px;
-  z-index: 1000;
-}
-.el-row-for:hover .details {
-  display: block;
-  border: 1px solid #dedede;
-}
-.details:hover {
-  display: none !important;
-}
-/* rank 数字 */
-.el-hot > div:nth-last-of-type(-n + 10) .rank {
-  width: 18px !important;
-  height: 18px !important;
-  font-size: 0.65em;
-  text-align: center;
-  margin: 0;
-}
-.el-hot > div:nth-of-type(-n + 3) .rank {
-  border-radius: 3px;
-  background: #2581dd;
-  color: aliceblue;
-}
-.el-hot > div:not(:nth-of-type(1)) .rank {
-  margin: 20% 0;
-}
-/* title hover */
-.el-row-for :hover p {
-  color: #2581dd;
-}
-/* details右侧最后一行 */
-.details .el-box-right .el-col {
-  min-height: 3em;
-}
-.details .details-span {
-  position: absolute;
-  bottom: -22%;
-  left: 2%;
-  overflow: hidden;
-}
-.el-box-right span {
-  margin: 0;
-  font-size: 0.5em;
-  color: #909399;
-}
-/* 最大显现行数 */
-.el-box-right p {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  font-size: 0.8em;
-  margin: 0;
-}
-.video-title p {
-  display: -webkit-box;
-  color: #303133;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
-  font-size: 0.8em;
-  line-height: 2em;
-  margin: 0;
-}
+// .details {
+//   position: absolute;
+//   background-color: #ffffff;
+//   border-radius: 5px;
+//   display: none;
+//   width: 88%;
+//   margin-top: -90px;
+//   padding: 10px;
+//   z-index: 1000;
+// }
+// .el-row-for:hover .details {
+//   display: block;
+//   border: 1px solid #dedede;
+// }
+// .details:hover {
+//   display: none !important;
+// }
+// /* rank 数字 */
+// .el-hot > div:nth-last-of-type(-n + 10) .rank {
+//   width: 18px !important;
+//   height: 18px !important;
+//   font-size: 0.65em;
+//   text-align: center;
+//   margin: 0;
+// }
+// .el-hot > div:nth-of-type(-n + 3) .rank {
+//   border-radius: 3px;
+//   background: #2581dd;
+//   color: aliceblue;
+// }
+// .el-hot > div:not(:nth-of-type(1)) .rank {
+//   margin: 20% 0;
+// }
+// /* title hover */
+// .el-row-for :hover p {
+//   color: #2581dd;
+// }
+// /* details右侧最后一行 */
+// .details .el-box-right .el-col {
+//   min-height: 3em;
+// }
+// .details .details-span {
+//   position: absolute;
+//   bottom: -22%;
+//   left: 2%;
+//   overflow: hidden;
+// }
+// .el-box-right span {
+//   margin: 0;
+//   font-size: 0.5em;
+//   color: #909399;
+// }
+// /* 最大显现行数 */
+// .el-box-right p {
+//   display: -webkit-box;
+//   -webkit-box-orient: vertical;
+//   -webkit-line-clamp: 2;
+//   overflow: hidden;
+//   font-size: 0.8em;
+//   margin: 0;
+// }
+// .video-title p {
+//   display: -webkit-box;
+//   color: #303133;
+//   -webkit-box-orient: vertical;
+//   -webkit-line-clamp: 1;
+//   overflow: hidden;
+//   font-size: 0.8em;
+//   line-height: 2em;
+//   margin: 0;
+// }
 </style>
