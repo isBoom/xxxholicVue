@@ -56,7 +56,7 @@ const routes = [{
         path: '/video/:id',
         name: 'Video',
         meta: {
-            keepAlive: false
+            keepAlive: true
         },
         //component: Home
         component: () =>

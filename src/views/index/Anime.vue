@@ -1,33 +1,35 @@
 <template>
  <div class="home">
-    <VideoBox class="videoBox"/> 
-    <VideoHot class="videoHot"/>
+    <VideoBox class="videoBox"/>
+    <VideoRank class="videoRank"/>
  </div>
 </template>
 <script>
-import VideoBox from '@/components/VideoBox.vue';
-import VideoHot from '@/components/VideoHot.vue';
+import VideoBox from './VideoBox.vue';
+import VideoRank from './VideoRank.vue';
 export default {
-    name: "anime",
+    name: "Anime",
     components: {
         VideoBox,
-        VideoHot
+        VideoRank
     },
     methods:{
     },
     created(){
-    }
+      this.$store.state.exclude = this.$store.state.exclude.filter(item => item != this.$route.name)
+    },
+    // activated(){
+    //   if(this.$route.meta.keepAlive == false){
+    //     this.$route.meta.keepAlive = true
+    //   }
+    // },
+    deactivated(){
+      this.$router.beforeEach((to, from, next) => {
+        if (to.name == "Video"){
+            this.$store.state.exclude.push(this.$route.name)
+        }
+        next()
+      })
+    },
 }
 </script>
-<style lang="scss" scoped>
-.home{
-  .videoBox{
-    width: 50%;
-    float: left;
-  }
-  .videoHot{
-    widows: 30%;
-    float: left;
-  }
-}
-</style>

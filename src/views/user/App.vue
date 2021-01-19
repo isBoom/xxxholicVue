@@ -1,24 +1,20 @@
 <template>
   <div id="app">
-   <HomeMenuBg />
-    <HomeMenu />
-    <!-- <div v-text="$store.state.exclude"></div> -->
+    <HomeMenu/>
+    <keep-alive>
+      <router-view />
+    </keep-alive>
     <div class="appContent">
-        <!-- <router-view /> -->
-        <keep-alive :exclude="$store.state.exclude">
-          <router-view />
-        </keep-alive>
         <div style="clear:both"></div>
     </div>
     <Copyright />
   </div>
 </template>
 <script>
-import HomeMenuBg from "@/components/HomeMenuBg.vue"
-import HomeMenu from "@/components/HomeMenu.vue"
+import HomeMenu from "@/components/HomeMenuLogin.vue"
 import Copyright from "@/components/Copyright.vue"
 export default {
-  name: "App",
+  name: "app",
   computed: {
     //key() {
       //路由发生变化就重新渲染
@@ -30,9 +26,10 @@ export default {
   components: {
     HomeMenu,
     Copyright,
-    HomeMenuBg,
   },
   methods:{
+  },
+  mounted(){
   }
 }
 
@@ -43,12 +40,12 @@ export default {
   margin: 0 auto;
   .appContent {
     width: 1200px;
-    min-height: 700px;
+    min-height: 600px;
     margin: 0 auto;
   }
 }
 .appContent{
-  padding-top: 0.5%;
+  padding-top: 2%;
 }
 </style>
 <style lang="scss">
@@ -62,6 +59,4 @@ export default {
     float: left;
   }
 }
-</style>>
-
 </style>

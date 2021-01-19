@@ -148,7 +148,7 @@ import * as API from "@/api/video";
 import * as userAPI from "@/api/user/";
 import Vue from "vue";
 export default {
-  name: "video",
+  name: "Video",
   data() {
     return {
       comments: [],
@@ -414,10 +414,20 @@ export default {
     }
   },
   created() {
-   // this.getUser();
+    // console.log("create");
+    // this.$router.beforeEach((to, from, next) => {
+    //   console.log("from.meta.keepAlive = false;");
+    //     from.meta.keepAlive = false;
+    //     next()
+    // })
+    this.getUser();
     this.load();
     //this.getComments();
+  },
+  deactivated(){
+    this.$route.meta.keepAlive = false;
   }
+  
 };
 </script>
 <style scoped>

@@ -2,12 +2,7 @@
   <div class="homeMenuBox">
     <div class="homeMenu">
       <div class="menu left">
-        <el-menu
-          router
-          class="el-menu-demo"
-          mode="horizontal"
-          @select="handleSelect"
-        >
+        <el-menu router mode="horizontal" @select="handleSelect" >
           <el-menu-item index="/">首页</el-menu-item>
           <el-menu-item index="/anime">动漫</el-menu-item>
           <el-menu-item index="/movie">电影</el-menu-item>
@@ -25,16 +20,34 @@
         <div class="user">
           <div v-if="isShownMenu">
             <div v-if="isLogin">
-              <el-menu class="el-menu-demo" mode="horizontal">
+              <el-menu mode="horizontal">
                 <el-menu-item>
-                  <el-avatar>头像</el-avatar>
+                  <el-dropdown>
+                    <span class="elDropdownLink">
+                      <el-avatar :src="user.avatar">{{user.nickname}}</el-avatar>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item class="clearfix">个人中心</el-dropdown-item>
+                      <el-dropdown-item class="clearfix" @click.native="exit">注销登录</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </el-menu-item>
+                <el-menu-item>
+                  <el-dropdown>
+                    <span class="elDropdownLink">
+                      <el-menu-item @click.native="manuscript()">投稿</el-menu-item>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item class="clearfix" @click.native="manuscript('mg')">稿件管理</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </el-menu-item>
               </el-menu>
             </div>
             <div v-else>
-              <el-menu class="el-menu-demo" mode="horizontal">
+              <el-menu mode="horizontal">
                 <el-menu-item>
-                  <a href="">登录</a>
+                  <a href="./login.html">登录</a>
                 </el-menu-item>
                 <el-menu-item>
                   <a href="">注册</a>
@@ -42,36 +55,13 @@
               </el-menu>
             </div>
           </div>
-          <!-- <div v-if="isShownMenu" key="1">
-          <div v-if="isLogin" class="navbarRight">
-            <el-dropdown trigger="hover">
-              <span class="el-dropdown-link">
-                <el-menu-item id="headPortrait">
-                  <el-avatar :src="user.avatar">头像</el-avatar>
-                </el-menu-item>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item class="clearfix">个人中心</el-dropdown-item>
-                <el-dropdown-item class="clearfix" @click.native="exit">注销登录</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </div>
-          <div v-else>
-            <el-menu-item class="navbarRight">
-              <a href="./login.html#/register">注册</a>
-            </el-menu-item>
-            <el-menu-item class="navbarRight">
-              <a href="./login.html#/">登录</a>
-            </el-menu-item>
-          </div>
-        </div> -->
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
+import * as userAPI from "@/api/user/";
 export default {
   name: "homeMenu",
   data() {
@@ -80,33 +70,76 @@ export default {
       isLogin: false,
       isShownMenu: false,
       input: "",
+      user:{},
     }
   },
   methods: {
-    handleSelect(key, keyPath) {},
+    handleSelect(key, keyPath) {
+     //window.open(`./#${keyPath}`,'_self')
+    },
+    load(){
+      var thisVue = this
+      setTimeout(function() {
+        thisVue.isShownMenu = true;
+      }, 1000);
+
+      if(this.$store.state.user.id==undefined){
+        userAPI.simpleInfoMe().then(res => {
+          if (res.code == 0) {
+            this.isLogin = true;
+            this.user = this.$store.state.user = res.data;
+          }
+        }).catch(err => { return });
+      }else{
+        this.isLogin = true;
+        this.user = this.$store.state.user
+      }
+    },
+    exit() {
+      userAPI.exit().then(res => {
+        if (res.code == 0) {
+          this.isLogin = false;
+          window.open(`./#`,'_self')
+          // this.$router.go(0);
+        } else {
+          console.log(res);
+        }
+      }).catch(err => {
+          this.$message.error("退出失败");
+          console.log(err);
+        });
+    },
+    manuscript(e){
+      switch(e){
+        case "mg" : window.open(`./user.html`,'_self')
+          break;
+        default :
+          break;
+      }
+    }
+  },
+  created(){
+    this.load()
+    // console.log("this.user");
+    // console.log(this.user);
+  },
+  components:{
+    
   },
   props: {
     msg: String,
   },
   mounted() {
-    this.isShownMenu = true
   },
 }
 </script>
 <style lang="scss" scoped>
-.el-menu.el-menu--horizontal {
-  border-bottom: solid 0px #e6e6e6 !important;
-}
 .homeMenuBox {
   width: 100%;
   min-width: 1450px;
-  border-bottom: solid 1px #e6e6e6;
-  //
-  box-shadow: inset 0px 50px 30px rgba(0, 0, 0, 0.3);
-  background: url("../static/homeBg.jpg") no-repeat center;
-  background-size: 2013px 155px;
-  //background-position-x: -200px;
+  border-bottom: solid 0px #e6e6e6;
   height: 155px;
+  //
   .homeMenu {
     margin-bottom: 30px;
     max-width: 1450px;
@@ -142,7 +175,6 @@ export default {
         text-align:center .s {
           float: left;
         }
-
         .el-input {
           width: 99%;
         }
@@ -153,13 +185,40 @@ export default {
           border: 0px;
         }
       }
+      .right{
+        .elDropdownLink {
+            cursor: pointer;
+            color: #409EFF;
+        }
+        .el-icon-arrow-down {
+          font-size: 12px;
+        }
+      }
     }
   }
 }
 </style>
-
-<style>
-/* body {
-   overflow-y: visible !important; 
-} */
+<style lang="scss">
+.el-avatar{
+          position: relative;
+          top: -5px;
+        }
+.el-avatar--circle{
+  position: relative;
+  top: -5p;
+}
+.el-menu.el-menu--horizontal {
+  border-bottom: solid 0px #e6e6e6 !important;
+}
+.search{
+  input{
+    background-color: rgba(255, 255, 255, 0.4);
+    &:focus{  
+      background-color: rgba(255, 255, 255,1);
+    }
+  }
+  .el-button{
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
 </style>

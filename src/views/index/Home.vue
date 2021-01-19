@@ -1,14 +1,14 @@
 <template>
  <div class="home">
-    <VideoBox class="videoBox"/> 
+    <VideoBox class="videoBox"/>
     <VideoRank class="videoRank"/>
  </div>
 </template>
 <script>
-import VideoBox from '@/components/VideoBox.vue';
-import VideoRank from '@/components/VideoRank.vue';
+import VideoBox from './VideoBox.vue';
+import VideoRank from './VideoRank.vue';
 export default {
-    name: "home",
+    name: "Home",
     components: {
         VideoBox,
         VideoRank
@@ -16,27 +16,20 @@ export default {
     methods:{
     },
     created(){
+      this.$store.state.exclude = this.$store.state.exclude.filter(item => item != this.$route.name)
     },
+    // activated(){
+    //   if(this.$route.meta.keepAlive == false){
+    //     this.$route.meta.keepAlive = true
+    //   }
+    // },
     deactivated(){
-        this.$router.beforeEach((to, from, next) => {
+      this.$router.beforeEach((to, from, next) => {
         if (to.name == "Video"){
-          this.$destroy()
+            this.$store.state.exclude.push(this.$route.name)
         }
         next()
       })
     },
 }
 </script>
-<style lang="scss" scoped>
-.home{
-  .videoBox{
-    width: 70%;
-    float: left;
-  }
-  .videoRank{
-    width: 30%;
-    float: left;
-  }
-}
-
-</style>

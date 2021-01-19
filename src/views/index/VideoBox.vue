@@ -1,6 +1,7 @@
 <template>
   <div class="videoBox">
     <div>
+      <div class="braceVideoBox"></div>
       <el-row :gutter="10" ref="boxHeight">
         <el-col :span="6" v-for="v in videos" :key="v.id" @click.native="videoInfo(v)">
           <!-- 大盒子强行宽高比 home-el-col-big -->
@@ -45,7 +46,7 @@
 <script>
 import * as API from "@/api/video/";
 export default {
-  name: 'videoBox',
+  name: 'VideoBox',
   data() {
     return {
         boxHeightChange:"",
@@ -94,6 +95,7 @@ export default {
             });
         },
         videoInfo(v) {
+         // window.open(`./#/video/${v.id}`,'_blank')
           this.$router.push({ path: "/video/" + `${v.id}` });
         }
     },
@@ -109,8 +111,7 @@ export default {
   updated() {
     this.$refs.boxHeight.$el.style.height = this.$refs.boxHeight.$el.offsetHeight+"px"
   },
-   activated(){
-    
+  activated(){
   },
 }
 </script>
@@ -136,10 +137,8 @@ export default {
     .el-card {
        /* 去边框 */
       border: 0px solid !important;
-      -webkit-box-shadow: 0 0 0 !important;
-      box-shadow: 0px 0px 0px !important;
-      //padding
-      
+      -webkit-box-shadow: 0 0 0;
+      box-shadow: 0px 0px 0px;
       /* 强制宽高比 */
       .videoBanner {
         width: 100%;
@@ -151,6 +150,15 @@ export default {
           position: absolute;
           top: 0;
           left: 0;
+          &::after{
+            display: block;
+            content: "";
+            width: 100%;
+            height: 100%;
+            position:absolute;
+            top:0px;
+            box-shadow: 0 -50px 20px rgba(0, 0, 0, 0.5) inset;
+          }
         }
       }
       .watchView{
@@ -176,6 +184,10 @@ export default {
 </style>
 <style lang="scss">
 .videoBox{
+  .braceVideoBox{
+    width: 840px;
+    height: 1px;
+  }
   .el-card{
     .el-card__body {
       padding: 0 ;
