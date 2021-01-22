@@ -1,19 +1,20 @@
 <template>
-  <div id="login" style="margin-top:200px">
-    <div id="login-content-box" style="width: 100%; min-width: 400px;">
-      <div id="login-content" style="margin-bottom: 30px; max-width: 400px; margin: 0 auto;">
+  <div class="login" style="margin-top:200px">
+    <div style="width: 100%; min-width: 500px;">
+      <div style="margin-bottom: 30px; max-width: 500px; margin: 0 auto;">
         <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item label="用户名" :rules="[{ required: true, message: '账号不能为空' }]">
-            <el-input v-model="form.userName"></el-input>
+          <el-form-item label="邮箱/用户名" required>
+            <el-input v-model="form.email"></el-input>
           </el-form-item>
 
-          <el-form-item label="密码" :rules="[{ required: true, message: '密码不能为空' }]">
+          <el-form-item label="密码" required>
             <el-input type="password" v-model="form.password"></el-input>
           </el-form-item>
 
           <el-form-item>
             <el-button @click.native.prevent="onLogin">登录</el-button>
             <el-button @click.native.prevent="$router.push({ path: '/register' })">注册</el-button>
+            <a style="float:right;" href="login#/forgotPassword" >忘记密码</a>
           </el-form-item>
         </el-form>
       </div>
@@ -28,7 +29,7 @@ export default {
     return {
       test: "test",
       form: {
-        userName: "",
+        email: "",
         password: ""
       }
     };
@@ -63,3 +64,17 @@ export default {
   }
 };
 </script>
+<style lang="scss" >
+.login{
+  .el-form-item__label{
+     width: 100% !important;
+     margin-left: -5%;
+     position: relative;
+     top:40px;
+     left: -400px;
+  }
+  .el-input{
+
+  }
+}
+</style>

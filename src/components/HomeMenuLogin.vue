@@ -18,11 +18,33 @@
       </div>
       <div class="menu right">
         <div class="user">
-          <el-menu router mode="horizontal" @select="handleSelect" >
-                <el-menu-item index="/">登录</el-menu-item>
-                <el-menu-item index="/register">注册</el-menu-item>
-          </el-menu>
-        </div>
+            <div v-if="isLogin">
+              <el-menu mode="horizontal" @click.native="myVideo">
+                <el-menu-item>
+                  <el-dropdown>
+                    <span class="elDropdownLink">
+                      <el-avatar :src="user.avatar">{{user.userName.charAt(0)}}</el-avatar>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item class="clearfix" @click.native="myVideo">个人中心</el-dropdown-item>
+                      <el-dropdown-item @click.native="postVideo">投稿</el-dropdown-item>
+                      <el-dropdown-item class="clearfix" @click.native="exit">注销登录</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </el-menu-item>
+              </el-menu>
+            </div>
+            <div v-else>
+              <el-menu mode="horizontal">
+                <el-menu-item>
+                  <a href="./login">登录</a>
+                </el-menu-item>
+                <el-menu-item>
+                  <a href="./login#/register">注册</a>
+                </el-menu-item>
+              </el-menu>
+            </div>
+          </div>
       </div>
     </div>
   </div>
@@ -35,22 +57,56 @@ export default {
   data() {
     return {
       isLogin: false,
-      isShownMenu: false,
       input: "",
+      user:{
+        userName:"",
+      },
     }
   },
   methods: {
     handleSelect(key, keyPath) {
-      window.open(`./#${keyPath}`,'_self')
+      window.open(`/#${key}`,'_self')
     },
     checkLogin(){
       if(this.$store.state.user.id==undefined ){
         userAPI.simpleInfoMe().then(res => {
-          if (res.code == 0) {this.$store.state.user = res.data}
-        }).catch(err => {console.log(err);return});}
-      if(this.$route.name == "Login" || this.$route.name == "Register"){
-        window.open(`./#`,'_self')
+          if (res.code == 0) {
+            this.$store.state.user = res.data;
+            this.user = res.data
+            this.isLogin = true
+            this.jump()
+          }
+        }).catch(err => {console.log(err);});
+      }else{
+        this.isLogin = true
+        this.jump()
       }
+    },
+    jump(){
+      if(this.$route.name == "Login" || this.$route.name == "Register"){
+        window.open(`/#`,'_self')
+      }
+    },
+    postVideo(){
+      window.open(`/user/#/postVideo`,'_self')
+      
+    },
+    myVideo(){
+      window.open(`/user/#`,'_self')
+    },
+    exit() {
+      userAPI.exit().then(res => {
+        if (res.code == 0) {
+          this.isLogin = false;
+          window.open(`/#`,'_self')
+          //this.$router.go(0);
+        } else {
+          console.log(res);
+        }
+      }).catch(err => {
+          this.$message.error("退出失败");
+          console.log(err);
+        });
     },
   },
   components:{
@@ -125,3 +181,38 @@ export default {
   }
 }
 </style>
+
+<style lang="scss">
+.homeMenuBox{
+  .el-avatar{
+    position: relative;
+    top: -5px;
+    img{
+      width:100%
+    }
+  }
+  .el-avatar--circle{
+    position: relative;
+    top: -5px;
+    font-size: 18px !important;
+  }
+  .el-menu.el-menu--horizontal {
+    border-bottom: solid 0px #e6e6e6 !important;
+  }
+  .search{
+    input{
+      background-color: rgba(255, 255, 255, 0.4);
+      &:focus{  
+        background-color: rgba(255, 255, 255,1);
+      }
+    }
+    .el-button{
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+  a{
+    text-decoration: none;
+  }
+}
+</style>
+

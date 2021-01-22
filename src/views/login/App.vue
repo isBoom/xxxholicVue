@@ -40,7 +40,7 @@ export default {
   margin: 0 auto;
   .appContent {
     width: 1200px;
-    min-height: 600px;
+    min-height: 130px;
     margin: 0 auto;
   }
 }
@@ -49,14 +49,18 @@ export default {
 }
 </style>
 <style lang="scss">
-.appContent{
-  .videoBox{
-    width: 70%;
-    float: left;
-  }
-  .videoRank{
-    width: 30%;
-    float: left;
-  }
+::-webkit-scrollbar {/*滚动条整体样式*/
+  width: 0px;     /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  background: #b8b6b6;
+}
+::-webkit-scrollbar-track {/*滚动条里面轨道*/
+  // -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  // border-radius: 10px;
+  background:rgba(0,0,0,0);
 }
 </style>

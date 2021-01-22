@@ -26,6 +26,9 @@ export default {
 }
 </script>
 <style lang="scss" >
+.el-card{
+    border: 0px solid red !important;
+}
 .videoRank{
     padding-left: 5%;
     .el-tabs__header{
@@ -48,7 +51,7 @@ export default {
             .el-tab-pane{
                 .el-card{
                     .el-card__body {
-                    padding: 0 ;
+                        padding: 0 ;
                     }
                 }
             }
@@ -139,11 +142,24 @@ export default {
                         }
                         .detailsSpan {
                             width: 100%;
-                            padding-right: 10%;
                             position: absolute;
-                            bottom:-25px;
+                            bottom:-30px;
                             left: 2%;
                             overflow: hidden;
+                            .userName{
+                                position: relative;
+                                white-space: nowrap; 
+                                display: inline-block;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                width: 55%;
+                            }
+                            .time{
+                                width: 45%;
+                                float:right;
+                                text-align:right;
+                                padding-right:5px
+                            }
                         }
                         //特殊处理
                         .videoTitle{

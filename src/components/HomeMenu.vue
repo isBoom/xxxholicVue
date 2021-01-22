@@ -20,25 +20,16 @@
         <div class="user">
           <div v-if="isShownMenu">
             <div v-if="isLogin">
-              <el-menu mode="horizontal">
+              <el-menu mode="horizontal" @click.native="myVideo">
                 <el-menu-item>
                   <el-dropdown>
                     <span class="elDropdownLink">
-                      <el-avatar :src="user.avatar">{{user.nickname}}</el-avatar>
+                      <el-avatar :src="user.avatar">{{user.userName.charAt(0)}}</el-avatar>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item class="clearfix">个人中心</el-dropdown-item>
+                      <el-dropdown-item class="clearfix" @click.native="myVideo">个人中心</el-dropdown-item>
+                      <el-dropdown-item @click.native="postVideo">投稿</el-dropdown-item>
                       <el-dropdown-item class="clearfix" @click.native="exit">注销登录</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
-                </el-menu-item>
-                <el-menu-item>
-                  <el-dropdown>
-                    <span class="elDropdownLink">
-                      <el-menu-item @click.native="manuscript()">投稿</el-menu-item>
-                    </span>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item class="clearfix" @click.native="manuscript('mg')">稿件管理</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </el-menu-item>
@@ -47,10 +38,10 @@
             <div v-else>
               <el-menu mode="horizontal">
                 <el-menu-item>
-                  <a href="./login.html">登录</a>
+                  <a href="./login">登录</a>
                 </el-menu-item>
                 <el-menu-item>
-                  <a href="">注册</a>
+                  <a href="./login#/register">注册</a>
                 </el-menu-item>
               </el-menu>
             </div>
@@ -82,14 +73,13 @@ export default {
       setTimeout(function() {
         thisVue.isShownMenu = true;
       }, 1000);
-
       if(this.$store.state.user.id==undefined){
         userAPI.simpleInfoMe().then(res => {
           if (res.code == 0) {
             this.isLogin = true;
             this.user = this.$store.state.user = res.data;
           }
-        }).catch(err => { return });
+        }).catch(err => {});
       }else{
         this.isLogin = true;
         this.user = this.$store.state.user
@@ -99,8 +89,8 @@ export default {
       userAPI.exit().then(res => {
         if (res.code == 0) {
           this.isLogin = false;
-          window.open(`./#`,'_self')
-          // this.$router.go(0);
+          window.open(`/#`,'_self')
+          //this.$router.go(0);
         } else {
           console.log(res);
         }
@@ -109,14 +99,12 @@ export default {
           console.log(err);
         });
     },
-    manuscript(e){
-      switch(e){
-        case "mg" : window.open(`./user.html`,'_self')
-          break;
-        default :
-          break;
-      }
-    }
+    postVideo(){
+      window.open(`./user/#/postVideo`,'_self')
+    },
+    myVideo(){
+      window.open(`./user/#`,'_self')
+    },
   },
   created(){
     this.load()
@@ -161,6 +149,7 @@ export default {
         display: -ms-flexbox;
         display: flex;
         border-bottom: 0px solid #409eff;
+        padding: 0 7px;
         &:hover {
           background-color: rgba(0, 0, 0, 0);
         }
@@ -200,12 +189,16 @@ export default {
 </style>
 <style lang="scss">
 .el-avatar{
-          position: relative;
-          top: -5px;
-        }
+  position: relative;
+  top: -7px;
+  img{
+    width:100%
+  } 
+}
 .el-avatar--circle{
   position: relative;
-  top: -5p;
+  top: -7px;
+  font-size: 18px !important;
 }
 .el-menu.el-menu--horizontal {
   border-bottom: solid 0px #e6e6e6 !important;

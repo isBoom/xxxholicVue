@@ -28,7 +28,7 @@
                     </p>
                   </div>
                   <div class="owner">
-                    <span v-html="'up'+' '+v.user.nickname"></span>
+                    <span v-html="'up'+' '+v.user.userName"></span>
                   </div>
                 </div>
               </el-card>
@@ -157,7 +157,11 @@ export default {
             height: 100%;
             position:absolute;
             top:0px;
-            box-shadow: 0 -50px 20px rgba(0, 0, 0, 0.5) inset;
+            box-shadow: 0 -40px 20px -20px rgba(0, 0, 0, 0.5) inset;
+          }
+          img{
+            position: absolute;
+            bottom: 0;
           }
         }
       }
@@ -173,10 +177,18 @@ export default {
       }
       .owner{
         position: absolute;
-        bottom:5%;
+        bottom:3%;
         color:#909399;
         font-family:'宋体';
         font-size:12px;
+        span{
+          position: relative;
+          white-space: nowrap; 
+          display: inline-block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 55%;
+        }
       }
     }
   }

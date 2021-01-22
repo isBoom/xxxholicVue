@@ -1,5 +1,5 @@
 <template>
-    <div class="videoRankMonthly">
+    <div class="VideoRankMonthlys">
         <div>
         <el-row >
             <el-col  v-for="(v , i) in videos" :key="v.id" @click.native="videoInfo(v)">
@@ -21,10 +21,8 @@
                     <el-col :span="14" :push="1">
                     <p class="videoTitle">{{ v.title }}</p>
                     <div class="detailsSpan">
-                        <span v-html="v.user.nickname"></span>
-                        <span v-html="nbsp"></span>
-                        <span v-html="nbsp"></span>
-                        <span v-html="unix(v.created_at)" style="float:right"></span>
+                        <span class="userName" v-html="v.user.userName" ></span>
+                        <span class="time" v-html="unix(v.created_at)"></span>
                     </div>
                     </el-col>
                 </div>

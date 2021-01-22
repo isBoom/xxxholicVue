@@ -1,14 +1,29 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from './Home.vue'
+import MyVideo from './MyVideo.vue'
 
 Vue.use(VueRouter)
 
 const routes = [{
-    path: '/',
-    name: 'home',
-    component: Home,
-}, ]
+        path: '/',
+        name: 'MyVideo',
+        component: MyVideo,
+    },
+    {
+        path: '/postVideo',
+        name: 'PostVideo',
+        //component: Home
+        component: () =>
+            import ( /* webpackChunkName: "about" */ './PostVideo.vue')
+    },
+    {
+        path: '/history',
+        name: 'History',
+        //component: Home
+        component: () =>
+            import ( /* webpackChunkName: "about" */ './History.vue')
+    },
+]
 
 const router = new VueRouter({
     routes
