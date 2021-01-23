@@ -9,4 +9,15 @@ const changePassword = form => axios.post(`/apis/api/v1/user/changePassword`, fo
 const exit = () => axios.delete(`/apis/api/v1/user/logout`).then(res => res.data)
 const changeSignature = form => axios.post(`/apis/api/v1/user/changeSignature?${qs.stringify(form)}`).then(res => res.data)
 const changeAvatar = form => axios.post(`/apis/api/v1/user/changeAvatar`, form).then(res => res.data)
-export { postRregister, postLogin, simpleInfoMe, exit, getCaptcha, changePassword, changeSignature, changeAvatar }
+const getHistory = form => axios.get(`/apis/api/v1/user/history?${qs.stringify(form)}`).then(res => res.data)
+export {
+    postRregister,
+    postLogin,
+    simpleInfoMe,
+    exit,
+    getCaptcha,
+    changePassword,
+    changeSignature,
+    changeAvatar,
+    getHistory,
+}
