@@ -8,7 +8,7 @@
             <el-input type="textarea" v-model="form.info" size="medium" placeholder="最少两位，最长五百位"></el-input>
         </el-form-item>
         <el-form-item label="视频封面">
-            <el-upload class="avatarUploader" action label="描述" ref="upload" :limit="1"
+            <el-upload class="avatarUploader" action label="描述" ref="upload"
                 :before-upload="fnBeforeUpload" :http-request="fnUploadRequest" :show-file-list="false">
                 <img v-if="imageUrl" :src="imageUrl" class="avatar" />
                 <i v-else class="el-icon-plus avatarUploaderIcon"></i>
@@ -17,7 +17,7 @@
         </el-form-item>
         <el-form-item label="视频">
             <el-upload  action :before-upload="vnBeforeUpload" 
-                :http-request="vnUploadRequest" multiple :limit="1" :on-exceed="handleExceed">
+                :http-request="vnUploadRequest" multiple :on-exceed="handleExceed">
                 <el-button size="small" type="primary">点击上传</el-button>
                 <el-select v-model="videoType" placeholder="视频类型">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -215,8 +215,16 @@ export default {
             position: relative;
             right: 10px;
         }
+        .el-upload__input{
+            display: none !important;
+        }
         .el-form-item{
             .avatarUploader{
+                .avatar{
+                    width: 200px;
+                    height: 112.5px;
+                    display: block;
+                }
                 .el-upload{
                     border: 1px dashed #d9d9d9;
                     border-radius: 6px;
@@ -224,10 +232,7 @@ export default {
                     position: relative;
                     overflow: hidden;
                 }
-                .el-upload-dragger {
-                    width: 200px;
-                }
-                .avatarUploaderIcon {
+                .avatarUploaderIcon{
                     font-size: 28px;
                     color: #8c939d;
                     width: 200px;
@@ -239,11 +244,11 @@ export default {
             .el-upload:hover {
                 border-color: #409eff;
             }
-            .avatar {
-                width: 200px;
-                height: 112.5px;
-                display: block;
-            }
+            // .avatar {
+            //     width: 200px;
+            //     height: 112.5px;
+            //     display: block;
+            // }
         }
     }
 }

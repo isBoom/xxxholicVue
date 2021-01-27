@@ -74,7 +74,6 @@ export default {
     name: "VideoRankDaily",
     data() {
         return {
-            rankType:"daily",
             params:{
                 videoType:"",
                 rankType:"",
@@ -82,6 +81,12 @@ export default {
             nbsp: "&#12288;",
             videos: [],
         };
+    },
+    props:{
+        rankType:{
+            type:String,
+            required:true,
+        }
     },
     methods: {
         unix(value) {

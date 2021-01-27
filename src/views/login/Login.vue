@@ -39,20 +39,28 @@ export default {
       API.postLogin(this.form)
         .then(res => {
           console.log(res);
-          if (res.code > 0) {
-            this.$notify.error({
-              title: "登录失败",
-              message: res.msg
-            });
-          } else {
+          if (res.code == 0){
             this.$notify({
               title: "登陆成功",
               type: "success"
             });
             setTimeout(function() {
-              window.location.href = "../";
+              window.open(`/#`,'_self');
             }, 300);
-          }
+          }else if (res.code == 1){
+            this.$notify({
+              title: "管理员登陆成功",
+              type: "success"
+            });
+            setTimeout(function() {
+              window.open(`/admin/#`,'_self')
+            }, 300);
+          } else {
+            this.$notify.error({
+              title: "登录失败",
+              message: res.msg
+            });
+          } 
         })
         .catch(e => {
           this.$notify({
@@ -66,13 +74,13 @@ export default {
 </script>
 <style lang="scss" >
 .login{
-  .el-form-item__label{
-     width: 100% !important;
-     margin-left: -5%;
-     position: relative;
-     top:40px;
-     left: -400px;
-  }
+    .el-form-item__label{
+      width: 100% !important;
+      margin-left: -5%;
+      position: relative;
+      top:40px;
+      left: -400px;
+    }
   .el-input{
 
   }

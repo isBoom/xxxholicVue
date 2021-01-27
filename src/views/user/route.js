@@ -17,6 +17,13 @@ const routes = [{
             import ( /* webpackChunkName: "about" */ './PostVideo.vue')
     },
     {
+        path: '/audit',
+        name: 'Audit',
+        //component: Home
+        component: () =>
+            import ( /* webpackChunkName: "about" */ './Audit.vue')
+    },
+    {
         path: '/history',
         name: 'History',
         //component: Home

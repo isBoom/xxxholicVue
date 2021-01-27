@@ -37,6 +37,12 @@ module.exports = {
             filename: "user.html",
             title: "user",
         },
+        admin: {
+            entry: "./src/views/admin/main.js",
+            template: "public/admin.html",
+            filename: "admin.html",
+            title: "admin",
+        },
     },
     lintOnSave: true,
     /** 区分打包环境与开发环境

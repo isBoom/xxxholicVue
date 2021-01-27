@@ -98,6 +98,11 @@ export default {
                 position: absolute;
                 top: 0;
                 left: 0;
+                img{
+                    height: 100%;
+                    position: absolute;
+                    bottom: 0;
+                }
                 &::after{
                     display: block;
                     content: "";
@@ -107,16 +112,13 @@ export default {
                     top:0px;
                     box-shadow: 0 -40px 20px -20px rgba(0, 0, 0, 0.5) inset;
                 }
-                img{
-                    position: absolute;
-                    bottom: 0;
-                }
             }
         }
     }
     .right{
         float: left;
         margin-left: 2%;
+        margin-top: 1%;
         .top{
             p:hover{
                 color:#00a1d6

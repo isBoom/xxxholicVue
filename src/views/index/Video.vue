@@ -1,11 +1,11 @@
 <template>
   <div class="video">
-    <div v-if="JSON.stringify(videoInfo) != '{}'" class="video-info">
-      <div class="video-title">{{videoInfo.title}}</div>
-      <div class="video-create-time">{{unix(videoInfo.created_at)}}</div>
-      <div class="video-view">{{"播放:"+videoInfo.view}}</div>
+    <div v-if="JSON.stringify(videoInfo) != '{}'" class="videoInfo">
+      <div class="videoTitle">{{videoInfo.title}}</div>
+      <div class="videoCreateTime">{{unix(videoInfo.created_at)}}</div>
+      <div class="videoView">{{"播放:"+videoInfo.view}}</div>
     </div>
-    <div class="video-player-box">
+    <div class="videoPlayerBox">
       <video-player
         v-if="showVideo"
         class="video-player vjs-custom-skin demo"
@@ -14,15 +14,15 @@
         :options="playerOptions"
       ></video-player>
     </div>
-    <div class="video-info-long">
+    <div class="videoInfoLong">
       <div>{{videoInfo.info}}</div>
     </div>
     <hr align="left" width="79%" style="opacity:0.5" />
     <div style="width:80%">
       <el-row>
         <el-col :span="2">
-          <div class="comment-avatar me">
-            <el-avatar :src="user.avatar">头像</el-avatar>
+          <div class="commentAvatar me">
+            <el-avatar :src="user.avatar">{{user.userName}}</el-avatar>
           </div>
         </el-col>
         <el-col :span="19">
@@ -42,22 +42,22 @@
       </el-row>
     </div>
     <!-- 评论详情 -->
-    <div class="comment-box" v-for="c in comments" :key="c.id">
+    <div class="commentBox" v-for="c in comments" :key="c.id">
       <!-- 增加变量  commentBoxShow控制评论框显示开关 placeholder评论框默认内容-->
       <font v-if="0">
         {{Vue.set(c,"commentBoxShow",false)}}
         {{Vue.set(c,"placeholder","")}}
       </font>
-      <el-row style="margin-top:1em">
+      <el-row>
         <el-col :span="2">
-          <div class="comment-avatar">
-            <el-avatar :src="c.user.avatar">头像</el-avatar>
+          <div class="commentAvatar">
+            <el-avatar :src="c.user.avatar">{{user.userName}}</el-avatar>
           </div>
         </el-col>
         <el-col :span="22" style="border-top:1px solid rgba(0, 0, 0, 0.2)">
-          <div style="width:100%" class="comment-username">{{c.user.nickname}}</div>
-          <div style="width:100%" class="comment-content">{{c.content}}</div>
-          <div style="width:100%" class="comment-time">
+          <div style="width:100%" class="commentUsername">{{c.user.userName}}</div>
+          <div style="width:100%" class="commentContent">{{c.content}}</div>
+          <div style="width:100%" class="commentTime">
             {{unix(c.createdAt)}}
             <font class="replyButton" @click="showCommentBox(c,c)">回复</font>
             <el-dropdown trigger="hover" class="el-icon-more-box" v-if="c.user.id==user.id">
@@ -70,24 +70,24 @@
             </el-dropdown>
           </div>
           <!-- 第二重评论 -->
-          <div style="width:100%" class="comment-two" v-for="cc in c.child" :key="cc.id">
+          <div style="width:100%" class="commentTwo" v-for="cc in c.child" :key="cc.id">
             <el-row>
               <el-col :span="1">
-                <div class="comment-avatar">
-                  <el-avatar :src="cc.user.avatar">头像</el-avatar>
+                <div class="commentAvatar">
+                  <el-avatar :src="cc.user.avatar">{{user.userName}}</el-avatar>
                 </div>
               </el-col>
               <el-col :span="23">
-                <div style="width:100%" class="comment-username">
-                  {{cc.user.nickname}}
-                  <font v-if="cc.parentId!=cc.firstId" class="comment-content">
+                <div style="width:100%" class="commentUsername">
+                  {{cc.user.userName}}
+                  <font v-if="cc.parentId!=cc.firstId" class="commentContent">
                     回复@{{" "}}
-                    <font style="color:#409EFF">{{cc.parentUser.nickname}}</font>
+                    <font style="color:#409EFF">{{cc.parentUser.userName}}</font>
                     {{" :"}}
                   </font>
-                  <font class="comment-content">{{cc.content}}</font>
+                  <font class="commentContent">{{cc.content}}</font>
                 </div>
-                <div style="width:100%" class="comment-time">
+                <div style="width:100%" class="commentTime">
                   {{unix(cc.createdAt)}}
                   <font class="replyButton" @click="showCommentBox(c,cc)">回复</font>
                   <el-dropdown
@@ -111,8 +111,8 @@
           <div style="width:100%;margin-top:1em" v-if="c.showCommentBox">
             <el-row>
               <el-col :span="2">
-                <div class="comment-avatar me">
-                  <el-avatar :src="user.avatar">头像</el-avatar>
+                <div class="commentAvatar me">
+                  <el-avatar :src="user.avatar">{{user.userName}}</el-avatar>
                 </div>
               </el-col>
               <el-col :span="19">
@@ -206,8 +206,7 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(() => {
+      }).then(() => {
           let data = {};
           data.id = c.id;
           data.parentId = c.parentId;
@@ -376,7 +375,7 @@ export default {
       if (cc.parentId == 0) {
         Vue.set(c, "placeholder", defaultPlaceholder);
       } else {
-        Vue.set(c, "placeholder", "回复 " + "@" + cc.user.nickname + ":");
+        Vue.set(c, "placeholder", "回复 " + "@" + cc.user.userName + ":");
       }
     },
     getUser() {
@@ -422,7 +421,7 @@ export default {
     // })
     this.getUser();
     this.load();
-    //this.getComments();
+    this.getComments();
   },
   deactivated(){
     this.$route.meta.keepAlive = false;
@@ -430,114 +429,126 @@ export default {
   
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 /* 视频本身 */
 body {
   overflow: visible !important;
 }
-.video-player-box {
-  width: 1024px;
-  height: 576px;
-  background: #fff;
-}
-.demo {
-  display: inline-block;
-  width: 1024px;
-  text-align: center;
-  line-height: 100px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #fff;
-  position: relative;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  margin-right: 4px;
-}
-/* 视频详情 */
-.video-title {
-  margin-top: 1em;
-  font-weight: 345;
-}
-.video-create-time,
-.video-view {
-  color: #b39999;
-  line-height: 15px;
-  height: 15px;
-  margin-bottom: 1px;
-  font-size: 0.65em;
-}
-.video-info-long {
-  font-weight: 400;
-  font-size: 0.7em;
-}
-.comment-box {
-  width: 79%;
-  word-break: break-all;
-  white-space: normal;
-}
-.comment-avatar {
-  height: 3.5em;
-  width: 3.5em;
-}
-.comment-two .comment-avatar {
-  margin-top: 0.4em;
-  height: 2em;
-  width: 2em;
-}
-.comment-avatar span {
-  width: 70%;
-  height: 70%;
-  margin-top: 15%;
-  line-height: 3.5em;
-}
-.comment-username {
-  font-size: 0.6em;
-  color: #606266;
-  margin-top: 1.5em;
-  margin-bottom: 0.5em;
-}
-.comment-content {
-  font-size: 0.7em;
-  color: #303133;
-  margin-bottom: 0.3em;
-  white-space: pre-wrap;
-}
-.comment-two .comment-content {
-  margin-left: 0.5em;
-  font-size: 1.1em;
-}
-.comment-time {
-  font-size: 0.6em;
-  color: #909399;
-}
-.comment-two .comment-avatar span {
-  margin-top: 10%;
-  line-height: 3em;
-  font-size: 0.5em;
-}
-.comment-two .comment-username {
-  margin-bottom: 0.8em;
-}
-.replyButton {
-  margin-left: 1em;
-}
-.replyButton:hover {
-  cursor: pointer;
-  color: #606266;
-  background: rgba(45, 172, 204, 0.2);
-  padding: 0.3em;
-  border-radius: 4px;
-}
-.el-icon-more-box {
-  float: right;
-  font-size: 1.2em;
-  transform: rotate(-90deg);
-}
-.el-icon-more:hover {
-  color: rgb(31, 213, 219);
-}
-.comment-two:hover .el-icon-more-box {
-  display: block !important;
+.video{
+    .videoPlayerBox {
+        width: 1024px;
+        height: 576px;
+        background: #fff;
+        .demo {
+          display: inline-block;
+          width: 1024px;
+          text-align: center;
+          line-height: 100px;
+          border: 1px solid transparent;
+          border-radius: 4px;
+          overflow: hidden;
+          background: #fff;
+          position: relative;
+          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+          margin-right: 4px;
+        }
+    }
+    /* 视频详情 */
+    .videoTitle {
+        margin-top: 1em;
+        font-weight: 345;
+    }
+    .videoCreateTime,.videoView {
+      color: #b39999;
+      line-height: 15px;
+      height: 15px;
+      margin-bottom: 1px;
+      font-size: 0.65em;
+    }
+    .videoInfoLong {
+        font-weight: 400;
+        font-size: 0.7em;
+    }
+    .commentBox {
+      margin-bottom: 10px;
+      width: 79%;
+      word-break: break-all;
+      white-space: normal;
+    }
+    .commentAvatar {
+      margin-top: 10px;
+      height: 80px;
+      width: 80px;
+      span {
+        width: 70%;
+        height: 70%;
+        margin-top: 15%;
+        line-height: 50px;
+      }
+    }
+    .commentUsername {
+      font-size: 12px;
+      color: #606266;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+    .commentContent {
+      font-size: 14px;
+      color: #303133;
+      margin-bottom: 7px;
+      white-space: pre-wrap;
+    }
+    .commentTime {
+      font-size: 12px;
+      color: #909399;
+    }
+    .commentTwo{
+        &:hover{
+            .el-icon-more-box {
+                display: block !important;
+            }
+        }
+        .commentAvatar {
+          margin-top: 15px;
+          height: 40px;
+          width: 40px;
+          span {
+            margin-top: 10%;
+            line-height: 30px;
+            font-size: 0.5em;
+          }
+        }
+        .commentContent {
+          margin-left: 0.5em;
+          font-size: 1.1em;
+        }
+        .commentUsername {
+          margin-bottom: 0.8em;
+        }
+    }
+    .commentTime{
+        .replyButton {
+          margin-left: 1em;
+          &:hover {
+            cursor: pointer;
+            color: #606266;
+            background: rgba(45, 172, 204, 0.2);
+            padding: 0.3em;
+            border-radius: 4px;
+          }
+        }
+        .el-icon-more-box {
+          float: right;
+          font-size: 1.2em;
+          transform: rotate(-90deg);
+          &:hover {
+            color: rgb(31, 213, 219);
+            // .el-icon-more-box {
+            //     display: block !important;
+            // }
+          }
+        }
+    }
 }
 </style>
 <style >

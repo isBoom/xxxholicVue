@@ -6,7 +6,7 @@
           <div class="img"><img src="@/static/userBg.png" style="width:100%"></div>
           <div class="user">
             <div class="avatar">
-              <el-upload class="avatarUploader" action ref="upload" style="display:none" :limit="1"
+              <el-upload class="avatarUploader" action ref="upload" style="display:none"
                 :before-upload="fnBeforeUpload" :http-request="fnUploadRequest" :show-file-list="false">
               </el-upload>
               <el-avatar @click.native="changeAvatar" :src="$store.state.user.avatar">{{userName}}</el-avatar>
@@ -18,10 +18,10 @@
           </div>
         </div>
         <div class="content">
-          <el-menu mode="horizontal" router>
+          <el-menu mode="horizontal" router >
           <el-menu-item index="/">我的视频</el-menu-item>
-          <el-menu-item index="/postVideo">投稿</el-menu-item>
           <el-menu-item index="/audit">审核中稿件</el-menu-item>
+          <el-menu-item index="/postVideo">投稿</el-menu-item>
           <el-menu-item index="/history">历史记录</el-menu-item>
           </el-menu>
           <div class="router">
@@ -161,7 +161,7 @@ export default {
       .user{
         $avatarHeight:70px;
         position: absolute;
-        bottom: 2%;
+        bottom: 10%;
         left: 2%;
         width: 100%;
         .avatar{
@@ -198,14 +198,14 @@ export default {
           width: 60%;
           p{
             position: relative;
-            left:20px;
-            bottom:10px;
+            left:30px;
+            bottom:0px;
             font-size: 16px;
           }
           .el-input{
             position: relative;
-            left:5px;
-            bottom:20px;
+            left:20px;
+            bottom:-10px;
           }
         }
       }

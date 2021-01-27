@@ -12,8 +12,10 @@
       </div>
       <div class="menu center">
         <div class="search">
-          <el-input class="s" v-model="input" placeholder="请搜索内容"></el-input>
-          <el-button class="s" icon="el-icon-search"></el-button>
+          <el-form ref="form" :model="form" @submit.native="submit">
+            <el-input class="s" v-model="input" placeholder="请搜索内容"></el-input>
+            <el-button class="s" icon="el-icon-search" @click="submit"></el-button>
+          </el-form>
         </div>
       </div>
       <div class="menu right">
@@ -23,7 +25,7 @@
                 <el-menu-item>
                   <el-dropdown>
                     <span class="elDropdownLink">
-                      <el-avatar :src="user.avatar">{{user.userName.charAt(0)}}</el-avatar>
+                      <el-avatar :src="user.avatar">{{user.userName}}</el-avatar>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item class="clearfix" @click.native="myVideo">个人中心</el-dropdown-item>
@@ -58,6 +60,7 @@ export default {
     return {
       isLogin: false,
       input: "",
+      form:{},
       user:{
         userName:"",
       },
@@ -68,31 +71,29 @@ export default {
       window.open(`/#${key}`,'_self')
     },
     checkLogin(){
-      if(this.$store.state.user.id==undefined ){
-        userAPI.simpleInfoMe().then(res => {
-          if (res.code == 0) {
-            this.$store.state.user = res.data;
-            this.user = res.data
-            this.isLogin = true
-            this.jump()
-          }
-        }).catch(err => {console.log(err);});
-      }else{
-        this.isLogin = true
-        this.jump()
-      }
+      userAPI.simpleInfoMe().then(res => {
+        if (res.code == 0) {
+          this.$store.state.user = res.data;
+          this.user = res.data
+          this.isLogin = true
+          this.jump()
+        }
+      }).catch(err => {console.log(err);});
     },
     jump(){
+      //登录界面已登录 跳转主页  其他界面未登录 跳转登录
       if(this.$route.name == "Login" || this.$route.name == "Register"){
         window.open(`/#`,'_self')
       }
     },
     postVideo(){
       window.open(`/user/#/postVideo`,'_self')
-      
     },
     myVideo(){
       window.open(`/user/#`,'_self')
+    },
+    submit(){
+      window.open(`/#/search?info=${this.input}`,'_self')
     },
     exit() {
       userAPI.exit().then(res => {
@@ -115,7 +116,7 @@ export default {
   props: {
     msg: String,
   },
-  created(){
+  mounted(){
     this.checkLogin()
   },
   

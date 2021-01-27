@@ -53,6 +53,16 @@ const routes = [{
             import ( /* webpackChunkName: "about" */ './Other.vue')
     },
     {
+        path: '/search',
+        name: 'Search',
+        meta: {
+            keepAlive: true
+        },
+        //component: Home
+        component: () =>
+            import ( /* webpackChunkName: "about" */ './Search.vue')
+    },
+    {
         path: '/video/:id',
         name: 'Video',
         meta: {

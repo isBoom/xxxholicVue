@@ -53,7 +53,7 @@ export default {
 </style>
 
 <style lang="scss">
-.appContent{
+.appContent .home{
   .videoBox{
     width: 70%;
     float: left;

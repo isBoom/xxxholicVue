@@ -1,15 +1,14 @@
 <template>
     <div class="videoBox">
-        <UpdateVideo v-if="showUpdateVideo" :visible.sync="showUpdateVideo" @refresh-data="refreshData" :videoObj='videoObj'></UpdateVideo>
         <div class="braceVideoBox"></div>
             <el-row :gutter="10" ref="boxHeight">
-            <el-col :span="4" v-for="v in videos" :key="v.id">
+            <el-col :span="4" v-for="v in videos" :key="v.id" @click.native="videoInfo(v)">
                 <!-- 大盒子强行宽高比 home-el-col-big -->
                 <div class="coverBoxBig">
                     <div class="coverBoxSmall">
                         <el-card shadow="never">
                         <!-- 强行宽高比 -->
-                            <div class="videoBanner" @click.native="videoInfo(v)">
+                            <div class="videoBanner">
                                 <el-image :src="v.avatar" style="width:100%">
                                 <div slot="error">
                                     <img src="@/static/defaultAvatar.png" style="width:100%" />
@@ -22,7 +21,7 @@
                                 </span>
                             </div>
                             <div class="title">
-                                <div class="homeVideoInfo">
+                                <div class="home-video-info">
                                     <p>{{ v.title }}<span></span></p>
                                 </div>
                                 <!-- del -->
@@ -32,7 +31,6 @@
                                             <i class="el-icon-more"></i>
                                         </span>
                                         <el-dropdown-menu slot="dropdown">
-                                            <el-dropdown-item class="clearfix" @click.native="updateVideo(v)">修改视频详情</el-dropdown-item>
                                             <el-dropdown-item class="clearfix" @click.native="delVideo(v)">删除视频</el-dropdown-item>
                                         </el-dropdown-menu>
                                     </el-dropdown>
@@ -49,13 +47,10 @@
     </div> 
 </template>
 <script>
-import UpdateVideo from "@/components/UpdateVideo.vue"
 import * as API from "@/api/video/";
 export default {
     data() {
         return {
-            currentPage:1,
-            showUpdateVideo: false,
             boxHeightChange:"",
             pageSize:12,
             videoCount:0,
@@ -70,18 +65,10 @@ export default {
             }
         };
     },
-    components:{
-        UpdateVideo
-    },
     methods: {
-        refreshData(){
-            this.loadPage(this.currentPage)
-            this.refresh = false
-        },
         loadPage(i) {
             this.videoParams.offset = this.pageSize * (i-1)
             this.getVideos(this.videoParams)
-            this.currentPage = i
         },
         getVideos(params) {
             API.getVideos(params)
@@ -110,32 +97,21 @@ export default {
                 });
         },
         videoInfo(v) {
-            window.open(`/#/video/${v.id}`,'_self')
-        },
-        updateVideo(v){
-            this.showUpdateVideo = true
-            this.videoObj = JSON.parse(JSON.stringify(v))
-        },
-        delVideo(v){
-            console.log(v);
-        },
-        removeVideo(v){
-            console.log("delllllllllllll");
-            this.videos = v
+            //window.open(`/#/video/${v.id}`,'_self')
         }
     },
-    
     created(){
-        this.videoParams.status = "normal"
+        this.videoParams.status = "Audit"
         this.videoParams.userId = 1
         this.videoParams.limit=this.pageSize,
         this.videoParams.info = this.$route.query.info
+        console.log(this.videoParams);
         this.getVideos(this.videoParams)
     }
 }
 </script>
 <style lang="scss" scoped>
-.homeVideoInfo p {
+.home-video-info p {
     margin-top: 5%;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -153,12 +129,12 @@ export default {
             position: absolute;
             top: 0;
             left: 0;
-        .el-card {
-            /* 去边框 */
-            border: 0px solid !important;
-            -webkit-box-shadow: 0 0 0;
-            box-shadow: 0px 0px 0px;
-            /* 强制宽高比 */
+            .el-card {
+                /* 去边框 */
+                border: 0px solid !important;
+                -webkit-box-shadow: 0 0 0;
+                box-shadow: 0px 0px 0px;
+                /* 强制宽高比 */
             .videoBanner {
                 width: 100%;
                 padding-bottom: 60%;
@@ -195,9 +171,9 @@ export default {
                 font-size:14px;
                 padding-right:10%;
                 .homeVideoInfo{
-                    float:left;
-                    width:90%;
-                }
+                        float:left;
+                        width:90%;
+                    }
                 .more{
                     float: left;
                     font-size: 1.2em;
@@ -206,6 +182,7 @@ export default {
                     right: 0;
                     bottom: 30px;
                 }
+                
             }
         }
     }

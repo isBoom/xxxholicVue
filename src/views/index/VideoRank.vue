@@ -1,16 +1,14 @@
 <template>
     <div class="videoRank">
         <el-tabs :tab-position="tabPosition">
-            <el-tab-pane class="VideoRankDaily" label="日排行" lazy><VideoRankDaily /></el-tab-pane>
-            <el-tab-pane class="VideoRankWeek" label="周排行" lazy><VideoRankWeekly /></el-tab-pane> 
-            <el-tab-pane class="VideoRankMonth" label="月排行" lazy><VideoRankMonthly /></el-tab-pane>
+            <el-tab-pane label="日排行" lazy><VideoRankList rankType="daily" /></el-tab-pane>
+            <el-tab-pane label="周排行" lazy><VideoRankList rankType="weekly" /></el-tab-pane> 
+            <el-tab-pane label="月排行" lazy><VideoRankList rankType="monthly" /></el-tab-pane>
         </el-tabs>
     </div>
 </template>
 <script>
-import VideoRankDaily from "./VideoRankDaily.vue";
-import VideoRankWeekly from "./VideoRankWeekly.vue";
-import VideoRankMonthly from "./VideoRankMonthly.vue";
+import VideoRankList from "./VideoRankList.vue";
 export default {
     name: "VideoRank",
     data() {
@@ -19,9 +17,7 @@ export default {
         };
     },
     components: {
-        VideoRankDaily,
-        VideoRankWeekly,
-        VideoRankMonthly,
+        VideoRankList,
     }
 }
 </script>
@@ -77,7 +73,7 @@ export default {
                     margin: 20% 0;
                 }
                 .el-col{
-                    margin-bottom: 2px;
+                    margin-bottom: 5px;
                     .videoTitle{
                         font-size: 14px;
                         line-height: 20px ;
@@ -96,9 +92,14 @@ export default {
                         .el-image{
                             width: 100%;
                             height: 100%;
-                            position: absolute; 
+                            position: absolute;
                             top: 0;
                             left: 0;
+                            img{
+                                height: 100%;
+                                position: absolute;
+                                bottom: 0;
+                            }
                         }
                     }
                     //hover显示视频详情

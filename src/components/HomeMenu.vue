@@ -12,8 +12,10 @@
       </div>
       <div class="menu center">
         <div class="search">
-          <el-input class="s" v-model="input" placeholder="请搜索内容"></el-input>
-          <el-button class="s" icon="el-icon-search"></el-button>
+          <el-form ref="form" :model="form" @submit.native="submit">
+            <el-input class="s" v-model="input" placeholder="请搜索内容"></el-input>
+            <el-button class="s" icon="el-icon-search" @click="submit"></el-button>
+          </el-form>
         </div>
       </div>
       <div class="menu right">
@@ -62,6 +64,7 @@ export default {
       isShownMenu: false,
       input: "",
       user:{},
+      form:{}
     }
   },
   methods: {
@@ -105,6 +108,9 @@ export default {
     myVideo(){
       window.open(`./user/#`,'_self')
     },
+    submit(){
+      window.open(`./#/search?info=${this.input}`,'_self')
+    }
   },
   created(){
     this.load()

@@ -1,42 +1,40 @@
 <template>
   <div class="videoBox">
-    <div>
       <div class="braceVideoBox"></div>
-      <el-row :gutter="10" ref="boxHeight">
-        <el-col :span="6" v-for="v in videos" :key="v.id" @click.native="videoInfo(v)">
-          <!-- 大盒子强行宽高比 home-el-col-big -->
-          <div class="coverBoxBig">
-            <div class="coverBoxSmall">
-              <el-card shadow="never">
-                <!-- 强行宽高比 -->
-                <div class="videoBanner">
-                  <el-image :src="v.avatar" style="width:100%">
-                    <div slot="error">
-                      <img src="@/static/defaultAvatar.png" style="width:100%" />
+        <el-row :gutter="10" ref="boxHeight">
+          <el-col :span="6" v-for="v in videos" :key="v.id" @click.native="videoInfo(v)">
+            <!-- 大盒子强行宽高比 home-el-col-big -->
+            <div class="coverBoxBig">
+              <div class="coverBoxSmall">
+                <el-card shadow="never">
+                  <!-- 强行宽高比 -->
+                  <div class="videoBanner">
+                    <el-image :src="v.avatar" style="width:100%">
+                      <div slot="error">
+                        <img src="@/static/defaultAvatar.png" style="width:100%" />
+                      </div>
+                    </el-image>
+                    <span class="watchView">
+                      <i class="el-icon-view">
+                        <span v-html="nbsp+' '+v.view"></span>
+                      </i>
+                    </span>
+                  </div>
+                  <div class="title">
+                    <div class="home-video-info">
+                      <p>{{ v.title }}
+                        <span></span>
+                      </p>
                     </div>
-                  </el-image>
-                  <span class="watchView">
-                    <i class="el-icon-view">
-                      <span v-html="nbsp+' '+v.view"></span>
-                    </i>
-                  </span>
-                </div>
-                <div class="title">
-                  <div class="home-video-info">
-                    <p>{{ v.title }}
-                      <span></span>
-                    </p>
+                    <div class="owner">
+                      <span v-html="'up'+' '+v.user.userName"></span>
+                    </div>
                   </div>
-                  <div class="owner">
-                    <span v-html="'up'+' '+v.user.userName"></span>
-                  </div>
-                </div>
-              </el-card>
+                </el-card>
+              </div>
             </div>
-          </div>
-        </el-col>
+          </el-col>
       </el-row>
-    </div>
     <div v-if="isLoading">
       <v-pagination show-quick-jumper @change="loadPage" :pageSize="pageSize" :total="videoCount"></v-pagination>
     </div>
@@ -106,6 +104,7 @@ export default {
       this.currentData = this.$route.path 
       this.videoParams.limit=this.pageSize,
       this.videoParams.videoType=this.$route.path.replaceAll("/","")
+      console.log(this.videoParams.videoType);
       this.getVideos(this.videoParams)
   },
   updated() {
@@ -150,6 +149,11 @@ export default {
           position: absolute;
           top: 0;
           left: 0;
+          img{
+            height: 100%;
+            position: absolute;
+            bottom: 0;
+          }
           &::after{
             display: block;
             content: "";
@@ -158,10 +162,6 @@ export default {
             position:absolute;
             top:0px;
             box-shadow: 0 -40px 20px -20px rgba(0, 0, 0, 0.5) inset;
-          }
-          img{
-            position: absolute;
-            bottom: 0;
           }
         }
       }
@@ -187,7 +187,7 @@ export default {
           display: inline-block;
           overflow: hidden;
           text-overflow: ellipsis;
-          width: 55%;
+          width: 100%;
         }
       }
     }
