@@ -24,6 +24,12 @@ const routes = [{
     meta: { keepAlive: true },
     component: () =>
         import ( /* webpackChunkName: "about" */ './CreateUser.vue'),
+}, {
+    path: '/videoNormalList',
+    name: 'VideoNormalList',
+    meta: { keepAlive: true },
+    component: () =>
+        import ( /* webpackChunkName: "about" */ './VideoNormalList.vue'),
 }, ]
 
 const router = new VueRouter({

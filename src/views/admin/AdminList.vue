@@ -27,7 +27,7 @@
             <el-button @click="batchDelete()" :disabled="multipleSelection.length==0" type="danger">批量删除</el-button>
             <el-button @click="toggleSelection()" >取消选择</el-button>
         </div>
-            <div v-if="isLoading">
+            <div v-if="isLoading" class="pagination">
                 <v-pagination show-quick-jumper @change="loadPage" :pageSize="pageSize" :total="count"></v-pagination>
             </div>        
     </div>
@@ -62,7 +62,7 @@ import * as API from '@/api/admin'
             },
             loadPage(i){
                 this.form.offset = this.pageSize*(i-1)
-                this.getUserList(this.form)
+                this.getUserList()
                 this.form = {}
                 this.currentPage = i
             },
@@ -111,8 +111,9 @@ import * as API from '@/api/admin'
                 this.form.email = this.form.userName = this.search
                 this.loadPage(this.currentPage)
             },
-            getUserList(form){
-                API.adminList(form).then(res =>{
+            getUserList(){
+                this.form.userType = "admin"
+                API.userList(this.form).then(res =>{
                     if(res.code == 0){
                         if (res.count == 0){
                             this.users = this.users.filter(data => false)
@@ -120,7 +121,7 @@ import * as API from '@/api/admin'
                         }
                         res.data.forEach(element => {
                             element.created_at = this.unix(element.created_at)
-                            element.permissions = "admin"
+                            element.permissions = "admins"
                         });
                         this.users = res.data
                         if(res.count > this.pageSize){
@@ -206,7 +207,7 @@ import * as API from '@/api/admin'
         }
     }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .table{
     position: relative;
     .pagination{

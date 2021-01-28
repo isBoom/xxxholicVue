@@ -21,7 +21,7 @@
                             <span>资源管理</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="2-1">已通过</el-menu-item>
+                            <el-menu-item index="videoNormalList">已通过</el-menu-item>
                             <el-menu-item index="2-2">审核中</el-menu-item>
                         </el-menu-item-group>
                         </el-submenu>

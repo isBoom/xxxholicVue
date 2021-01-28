@@ -52,7 +52,7 @@ import * as API from '@/api/admin'
                 id:[],
                 form:{},
                 userObj:{},
-                isLoading:true,
+                isLoading:false,
                 batchDeleteDisabled:true,
                 showUpdateUser:false,
                 checkRefresh:false,
@@ -73,7 +73,7 @@ import * as API from '@/api/admin'
             },
             loadPage(i){
                 this.form.offset = this.pageSize*(i-1)
-                this.getUserList(this.form)
+                this.getUserList()
                 this.form = {}
                 this.currentPage = i
             },
@@ -120,8 +120,9 @@ import * as API from '@/api/admin'
                 this.form.email = this.form.userName = this.search
                 this.loadPage(this.currentPage)
             },
-            getUserList(form){
-                API.userList(form).then(res =>{
+            getUserList(){
+                this.form.userType = "normal"
+                API.userList(this.form).then(res =>{
                     if(res.code == 0){
                         if (res.count == 0){
                             this.users = this.users.filter(data => false)
@@ -210,7 +211,7 @@ import * as API from '@/api/admin'
 
         },
         created(){
-            this.getUserList({})
+            this.getUserList()
             // var t = this
             // setInterval(function(){
             //     console.log(t.multipleSelection.length);
