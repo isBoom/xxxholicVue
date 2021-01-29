@@ -7,8 +7,8 @@ module.exports = {
         hotOnly: false,
         proxy: {
             "/apis": {
-                target: "http://127.0.0.1:8000/",
-                //target: "http://39.107.48.224:8000/",
+                //target: "http://127.0.0.1:8000/",
+                target: "http://39.107.48.224:8000/",
                 ws: true,
                 changeOrigin: true,
                 pathRewrite: {
@@ -28,19 +28,19 @@ module.exports = {
         login: {
             entry: "./src/views/login/main.js",
             template: "public/login.html",
-            filename: "login.html",
+            filename: "login",
             title: "login"
         },
         user: {
             entry: "./src/views/user/main.js",
             template: "public/user.html",
-            filename: "user.html",
+            filename: "user",
             title: "user",
         },
         admin: {
             entry: "./src/views/admin/main.js",
             template: "public/admin.html",
-            filename: "admin.html",
+            filename: "admin",
             title: "admin",
         },
     },
@@ -50,9 +50,10 @@ module.exports = {
      * process.env.NODE_ENV==='development' (开发环境)
      * baseUrl: process.env.NODE_ENV==='production'?"https://cdn.didabisai.com/front/":'front/',
      */
+    publicPath : './',
     // 基本路径
-    publicPath: process.env.NODE_ENV === 'production' ?
-        './' : '/',
+    //publicPath: process.env.NODE_ENV === 'production' ?
+    //    './' : '/',
     // 输出文件目录
     outputDir: 'dist',
     // eslint-loader 是否在保存的时候检查

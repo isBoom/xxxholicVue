@@ -103,10 +103,10 @@ export default {
         });
     },
     postVideo(){
-      window.open(`./user/#/postVideo`,'_self')
+      window.open(`./user#/postVideo`,'_self')
     },
     myVideo(){
-      window.open(`./user/#`,'_self')
+      window.open(`./user`,'_self')
     },
     submit(){
       window.open(`./#/search?info=${this.input}`,'_self')

@@ -60,7 +60,7 @@ export default {
             userAPI.exit().then(res => {
                 if (res.code == 0) {
                 this.isLogin = false;
-                window.open(`/login/#`,'_self')
+                window.open(`/login`,'_self')
                 //this.$router.go(0);
                 } else {
                 console.log(res);
@@ -78,7 +78,7 @@ export default {
         },
         handleSelect(key,keyPath){
             switch(key){
-                case "home": window.open(`/#/`,'_self')
+                case "home": window.open(`/`,'_self')
                     break;
                 case "exit": this.exit()
                     break;

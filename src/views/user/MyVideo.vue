@@ -145,7 +145,7 @@ export default {
                 });
         },
         videoInfo(v) {
-            window.open(`/#/video/${v.id}`,'_self')
+            window.open(`/video/${v.id}`,'_self')
         },
         updateVideo(v){
             this.showUpdateVideo = true

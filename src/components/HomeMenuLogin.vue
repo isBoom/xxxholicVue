@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {
-      window.open(`/#${key}`,'_self')
+      window.open(`./#${key}`,'_self')
     },
     checkLogin(){
       userAPI.simpleInfoMe().then(res => {
@@ -83,23 +83,23 @@ export default {
     jump(){
       //登录界面已登录 跳转主页  其他界面未登录 跳转登录
       if(this.$route.name == "Login" || this.$route.name == "Register"){
-        window.open(`/#`,'_self')
+        window.open(`/`,'_self')
       }
     },
     postVideo(){
-      window.open(`/user/#/postVideo`,'_self')
+      window.open(`/user#/postVideo`,'_self')
     },
     myVideo(){
-      window.open(`/user/#`,'_self')
+      window.open(`/user`,'_self')
     },
     submit(){
-      window.open(`/#/search?info=${this.input}`,'_self')
+      window.open(`./#/search?info=${this.input}`,'_self')
     },
     exit() {
       userAPI.exit().then(res => {
         if (res.code == 0) {
           this.isLogin = false;
-          window.open(`/#`,'_self')
+          window.open(`/`,'_self')
           //this.$router.go(0);
         } else {
           console.log(res);

@@ -74,7 +74,7 @@ export default {
             }).catch(e => {console.log(e);})
         },
         videoInfo(videoId){
-            window.open(`/#/video/${videoId}`,'_self')
+            window.open(`/video/${videoId}`,'_self')
         }
     },
     created(){

@@ -186,7 +186,7 @@ export default {
                 if (res.code > 0) {
                     this.$notify({title: "失败",message: `${res.msg}`,type: "error"});
                 } else {this.$notify({title: "投稿成功,请等待审核",message: `您的投稿ID为${res.data.id}`,type: "success"});
-                    window.open(`./user/#`,'_self')
+                    window.open(`./user`,'_self')
                 }
             }).catch(function(err) {
                 this.$notify({

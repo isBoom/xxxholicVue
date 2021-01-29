@@ -45,7 +45,7 @@ export default {
               type: "success"
             });
             setTimeout(function() {
-              window.open(`/#`,'_self');
+              window.open(`/`,'_self');
             }, 300);
           }else if (res.code == 1){
             this.$notify({
@@ -53,7 +53,7 @@ export default {
               type: "success"
             });
             setTimeout(function() {
-              window.open(`/admin/#`,'_self')
+              window.open(`/admin`,'_self')
             }, 300);
           } else {
             this.$notify.error({
