@@ -22,16 +22,17 @@
                         </template>
                         <el-menu-item-group>
                             <el-menu-item index="videoNormalList">已通过</el-menu-item>
-                            <el-menu-item index="2-2">审核中</el-menu-item>
+                            <el-menu-item index="videoAuditList">审核中</el-menu-item>
+                            <el-menu-item index="postVideo">发布视频</el-menu-item>
                         </el-menu-item-group>
                         </el-submenu>
                     <el-submenu index="3">
                         <template slot="title">
-                            <!-- <i class="el-icon-location"></i> -->
                             <span>更多</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="">退出</el-menu-item>
+                            <el-menu-item index="home">前往主页</el-menu-item>
+                            <el-menu-item index="exit">退出</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                 </el-menu>
@@ -41,6 +42,7 @@
     </div>
 </template>
 <script>
+import * as userAPI from "@/api/user"
 export default {
     name: "Home",
     computed: {
@@ -54,17 +56,38 @@ export default {
     components: {
     },
     methods:{
+        exit() {
+            userAPI.exit().then(res => {
+                if (res.code == 0) {
+                this.isLogin = false;
+                window.open(`/login/#`,'_self')
+                //this.$router.go(0);
+                } else {
+                console.log(res);
+                }
+            }).catch(err => {
+                this.$message.error("退出失败");
+                console.log(err);
+                });
+        },
         handleOpen(key, keyPath) {
-            console.log(key, keyPath);
+            //console.log(key, keyPath);
         },
         handleClose(key, keyPath) {
-            console.log(key, keyPath);
+            //console.log(key, keyPath);
         },
         handleSelect(key,keyPath){
-            console.log(key, keyPath);
-            this.$router.push(`/${key}`)
+            switch(key){
+                case "home": window.open(`/#/`,'_self')
+                    break;
+                case "exit": this.exit()
+                    break;
+                default : this.$router.push(`/${key}`)
+                    break;
+            }
+            
         }
-    }
+    },
 }
 
 </script>

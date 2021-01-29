@@ -1,7 +1,7 @@
 <template>
     <el-dialog  :visible.sync="visible" title="更新用户信息" width="500px" :before-close="modalClose" center  :close-on-click-modal="false"
         :close-on-press-escape="false" >
-        <el-form :model="userObj" :rules="rules" label-width="100px">
+        <el-form class="updateUser" :model="userObj" :rules="rules" label-width="100px">
             <el-form-item label="头像">
                 <el-upload class="avatarUploader" action label="描述" ref="upload"
                     :before-upload="fnBeforeUpload" :http-request="fnUploadRequest" :show-file-list="false">
@@ -42,7 +42,7 @@
 import * as API from "@/api/admin/";
 import * as userAPI from "@/api/video/";
     export default {
-        name: 'UpdateVideo',
+        name: 'UpdateUser',
         data() {
             return {
                 options:[
@@ -164,37 +164,39 @@ import * as userAPI from "@/api/video/";
     };
 </script>
 <style lang="scss">
-.el-upload__input{
+.updateUser{
+    .el-upload__input{
         display: none !important;
     }
-.avatarUploader{
-    .avatar{
-        display: block;
-    }
-    .el-upload{
-        width: 80px;
-        height: 80px;
-        border: 1px dashed #d9d9d9;
-        border-radius: 600px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        img{
-            height: 100%;
+    .avatarUploader{
+        .avatar{
+            display: block;
+        }
+        .el-upload{
+            width: 80px;
+            height: 80px;
+            border: 1px dashed #d9d9d9;
+            border-radius: 600px;
+            cursor: pointer;
             position: relative;
-            right: 40%;
+            overflow: hidden;
+            img{
+                height: 100%;
+                position: relative;
+                right: 40%;
+            }
+        }
+        .avatarUploaderIcon{
+            font-size: 28px;
+            color: #8c939d;
+            width: 200px;
+            height: 112.5px;
+            line-height: 112.5px;
+            text-align: center;
         }
     }
-    .avatarUploaderIcon{
-        font-size: 28px;
-        color: #8c939d;
-        width: 200px;
-        height: 112.5px;
-        line-height: 112.5px;
-        text-align: center;
+    .el-upload:hover {
+        border-color: #409eff;
     }
-}
-.el-upload:hover {
-    border-color: #409eff;
 }
 </style>

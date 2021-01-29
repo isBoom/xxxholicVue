@@ -9,7 +9,7 @@ export default {
     name: "SIdentify",
     props: {
     identifyCode: {
-    type: String,
+        type: String,
         default: "1234"
     },
     fontSizeMin: {

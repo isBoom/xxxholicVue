@@ -83,6 +83,7 @@ export default {
             return Y + M + D + h + m + s;
         },
         getVideoList(){
+            this.form.status = "audit"
             API.videoList(this.form).then(res => {
                 if(res.code == 0){
                     console.log(res);

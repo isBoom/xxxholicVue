@@ -1,6 +1,6 @@
 <template>
     <div class="videoBox">
-        <UpdateVideo v-if="showUpdateVideo" :visible.sync="showUpdateVideo" @refresh-data="refreshData" :videoObj='videoObj'></UpdateVideo>
+        <UpdateVideo v-if="showUpdateVideo" :visible.sync="showUpdateVideo" @update-data="updateVideoSave" :title="title" :videoObj='videoObj'></UpdateVideo>
         <div class="braceVideoBox"></div>
             <el-row :gutter="10" ref="boxHeight">
             <el-col :span="4" v-for="v in videos" :key="v.id">
@@ -9,7 +9,7 @@
                     <div class="coverBoxSmall">
                         <el-card shadow="never">
                         <!-- 强行宽高比 -->
-                            <div class="videoBanner" @click.native="videoInfo(v)">
+                            <div class="videoBanner" @click="videoInfo(v)">
                                 <el-image :src="v.avatar" style="width:100%">
                                 <div slot="error">
                                     <img src="@/static/defaultAvatar.png" style="width:100%" />
@@ -54,6 +54,7 @@ import * as API from "@/api/video/";
 export default {
     data() {
         return {
+            title:"更新视频信息(提交后将会重新被审核)",
             currentPage:1,
             showUpdateVideo: false,
             boxHeightChange:"",
@@ -73,15 +74,49 @@ export default {
     components:{
         UpdateVideo
     },
+    watch:{
+        videoCount:{
+            handler(v){
+                console.log(v);
+                if(v > this.pageSize){
+                    this.isLoading = true
+                }else{
+                    this.isLoading = false
+                }
+            },
+        },
+    },
     methods: {
-        refreshData(){
-            this.loadPage(this.currentPage)
-            this.refresh = false
+        updateVideoSave(data){
+            API.updateVideo(data).then(res =>{
+                if (res.code == 0){
+                    this.$notify({
+                        title: "更新成功 请等待审核",
+                        type: "success"
+                    });
+                    if(this.videos.length == 1){
+                        this.currentPage--
+                    }
+                    this.loadPage(this.currentPage)
+                }else{
+                    this.$notify({
+                        title: "更新失败",
+                        type: "error"
+                    });
+                }
+            }).catch(e=>{})
         },
         loadPage(i) {
             this.videoParams.offset = this.pageSize * (i-1)
             this.getVideos(this.videoParams)
             this.currentPage = i
+
+            for(let v = 0;v<document.getElementsByClassName("ant-pagination-item").length; v++){
+                document.getElementsByClassName("ant-pagination-item")[v].classList.remove("ant-pagination-item-active")
+            }
+            if(document.getElementsByClassName("ant-pagination-item").length!=0){
+                document.getElementsByClassName("ant-pagination-item")[this.currentPage-1].classList.add("ant-pagination-item-active")
+            }
         },
         getVideos(params) {
             API.getVideos(params)
@@ -92,7 +127,7 @@ export default {
                     if (res.count > this.pageSize) {
                         this.isLoading = true
                     }
-                    
+
                 } else {
                     this.$message({
                     message: res.msg,
@@ -119,10 +154,6 @@ export default {
         delVideo(v){
             console.log(v);
         },
-        removeVideo(v){
-            console.log("delllllllllllll");
-            this.videos = v
-        }
     },
     
     created(){

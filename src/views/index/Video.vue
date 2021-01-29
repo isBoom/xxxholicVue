@@ -220,6 +220,7 @@ export default {
                     this.comments.splice(index, 1);
                   }
                 } else {
+                  //暂有bug
                   let obj = this.getParentObjectById(this.comments, c.id);
                   let index = obj.child.indexOf(c);
                   if (index != -1) {

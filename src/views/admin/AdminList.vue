@@ -1,12 +1,11 @@
 <template>
     <div class="table">
-        <UpdateUser v-if="showUpdateUser" :visible.sync="showUpdateUser"  @refresh-data="refreshData" :userObj='userObj'></UpdateUser>
+        <UpdateUser v-if="showUpdateUser" :visible.sync="showUpdateUser" @refresh-data="refreshData" :userObj='userObj'></UpdateUser>
         <el-table ref="multipleTable"  :data="users" border stripe tooltip-effect="dark" style="width: 100%;"
-            @selection-change="handleSelectionChange">
+            @selection-change="handleSelectionChange" :row-key="(row) => {return row.id}">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column label="ID" width="40" show-overflow-tooltip prop="id"></el-table-column>
             <el-table-column label="创建日期" width="200" show-overflow-tooltip prop="created_at"></el-table-column>
-                <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
             <el-table-column prop="email" width="200" label="邮箱" show-overflow-tooltip></el-table-column>
             <el-table-column prop="userName" width="120" label="姓名" show-overflow-tooltip ></el-table-column>
             <el-table-column prop="status" width="80" label="状态" show-overflow-tooltip ></el-table-column>
@@ -27,9 +26,9 @@
             <el-button @click="batchDelete()" :disabled="multipleSelection.length==0" type="danger">批量删除</el-button>
             <el-button @click="toggleSelection()" >取消选择</el-button>
         </div>
-            <div v-if="isLoading" class="pagination">
-                <v-pagination show-quick-jumper @change="loadPage" :pageSize="pageSize" :total="count"></v-pagination>
-            </div>        
+        <div v-if="isLoading" class="pagination">
+            <v-pagination show-quick-jumper @change="loadPage" :pageSize="pageSize" :total="count"></v-pagination>
+        </div>
     </div>
 </template>
 <script>
@@ -39,7 +38,7 @@ import * as API from '@/api/admin'
         data() {
             return {
                 search: '',
-                isLoading:true,
+                isLoading:false,
                 pageSize:10,
                 count:0,
                 batchDeleteDisabled:true,
@@ -61,10 +60,20 @@ import * as API from '@/api/admin'
                 this.refresh = false
             },
             loadPage(i){
+                this.form.email = this.userName = this.search
                 this.form.offset = this.pageSize*(i-1)
                 this.getUserList()
                 this.form = {}
                 this.currentPage = i
+                this.resetAntPaginationItem()
+            },
+            resetAntPaginationItem(){
+                for(let i = 0;i<document.getElementsByClassName("ant-pagination-item").length;i++){
+                    document.getElementsByClassName("ant-pagination-item")[i].classList.remove("ant-pagination-item-active")
+                }
+                if(document.getElementsByClassName("ant-pagination-item").length!=0){
+                    document.getElementsByClassName("ant-pagination-item")[this.currentPage-1].classList.add("ant-pagination-item-active")
+                }
             },
             toggleSelection(rows) {
                 console.log(">>>>");
@@ -108,22 +117,28 @@ import * as API from '@/api/admin'
                 return Y + M + D + h + m + s;
             },
             retrieve(){
-                this.form.email = this.form.userName = this.search
-                this.loadPage(this.currentPage)
+                this.loadPage(1)
+                for(let i = 0;i<document.getElementsByClassName("ant-pagination-item").length;i++){
+                    document.getElementsByClassName("ant-pagination-item")[i].classList.remove("ant-pagination-item-active")
+                }
+                if(document.getElementsByClassName("ant-pagination-item").length!=0){
+                    document.getElementsByClassName("ant-pagination-item")[0].classList.add("ant-pagination-item-active")
+                }
             },
             getUserList(){
-                this.form.userType = "admin"
+                this.form.permissionsType = "admin"
                 API.userList(this.form).then(res =>{
                     if(res.code == 0){
-                        if (res.count == 0){
-                            this.users = this.users.filter(data => false)
+                        if (res.data != null){
+                            res.data.forEach(element => {
+                                element.created_at = this.unix(element.created_at)
+                                element.permissions = "admin"
+                            });
+                            this.users = res.data
+                        }else{
+                            this.users = []
                             return
                         }
-                        res.data.forEach(element => {
-                            element.created_at = this.unix(element.created_at)
-                            element.permissions = "admins"
-                        });
-                        this.users = res.data
                         if(res.count > this.pageSize){
                             this.isLoading = true
                             this.count = res.count
@@ -177,8 +192,11 @@ import * as API from '@/api/admin'
             },
             delUser(){
                 let data = {"ids":this.id.join(",")}
-                    API.batchDelete(data).then(res =>{
+                    API.batchDeleteUser(data).then(res =>{
                         if(res.code == 0){
+                            if(this.users.length <= this.id.join(",").split(",").length){
+                                this.currentPage--
+                            }
                             this.loadPage(this.currentPage)
                             this.multipleSelection = []
                             this.id = []

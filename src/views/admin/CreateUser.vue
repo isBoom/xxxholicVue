@@ -67,9 +67,10 @@ export default {
     },
     methods:{
         close(){
-            this.form = {}
+            this.form = {
+                "permissions":"normal"
+            }
             this.imageUrl = ""
-            this.form.permissions = "normal"
         },
         onSumbit(){
                 API.createUser(this.form).then(res =>{
@@ -79,6 +80,7 @@ export default {
                             message:res.msg,
                             type: "success"
                         });
+                        this.close()
                     }else{
                         this.$notify({
                             title: "添加失败",
@@ -86,8 +88,8 @@ export default {
                             type: "error"
                         });
                     }
-                    this.close()
-                }).catch(e=>{this.close()}) 
+                    
+                }).catch(e=>{}) 
             },
             fnBeforeUpload(file) {
                 const isJPG = file.type === "image/jpeg" || file.type === "image/png";
@@ -131,10 +133,44 @@ export default {
     }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .createUser{
     width: 30%;
     margin-left: 30%;
     margin-top: 5%;
+    .el-upload__input{
+        display: none !important;
+    }
+    .avatarUploader{
+        .avatar{
+            display: block;
+        }
+        .el-upload{
+            width: 80px;
+            height: 80px;
+            border: 1px dashed #d9d9d9;
+            border-radius: 600px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            img{
+                height: 100%;
+                position: relative;
+                right: 40%;
+            }
+        }
+        .avatarUploaderIcon{
+            font-size: 28px;
+            color: #8c939d;
+            width: 200px;
+            height: 112.5px;
+            line-height: 112.5px;
+            text-align: center;
+        }
+    }
+    .el-upload:hover {
+        border-color: #409eff;
+    }
 }
+
 </style>

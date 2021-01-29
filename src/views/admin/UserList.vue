@@ -1,26 +1,23 @@
 <template>
     <div class="table">
-        <UpdateUser v-if="showUpdateUser" :visible.sync="showUpdateUser" @refresh-data="refreshData" :userObj='userObj'></UpdateUser>
-        <!-- :data="users.filter(data => !search || data.userName.toLowerCase().includes(search.toLowerCase()))" -->
+        <UpdateUser v-if="showUpdateUser" :visible.sync="showUpdateUser" @refresh-data="refreshData" :userObj='userObj' />
         <el-table ref="multipleTable"  :data="users" border stripe tooltip-effect="dark" style="width: 100%;"
             @selection-change="handleSelectionChange" :row-key="(row) => {return row.id}">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column label="ID" width="40" show-overflow-tooltip prop="id"></el-table-column>
-            <el-table-column label="创建日期" width="200" show-overflow-tooltip prop="created_at">
-                <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
-            </el-table-column>
+            <el-table-column label="创建日期" width="200" show-overflow-tooltip prop="created_at"></el-table-column>
             <el-table-column prop="email" width="200" label="邮箱" show-overflow-tooltip></el-table-column>
             <el-table-column prop="userName" width="120" label="姓名" show-overflow-tooltip ></el-table-column>
             <el-table-column prop="status" width="80" label="状态" show-overflow-tooltip ></el-table-column>
             <el-table-column prop="signature" label="个性签名" show-overflow-tooltip></el-table-column>
-            <el-table-column width="300" label="操作" >
+            <el-table-column width="300">
                 <template slot="header" slot-scope="scope"><div v-if="false">{{scope}}</div>
-                    <el-input v-model="search" size="mini"  placeholder="邮箱/姓名" style="width:45%;margin-right:5%"/>
-                    <el-button  @click="retrieve" size="mini">检索</el-button>
+                    <el-input v-model="search" size="mini" placeholder="邮箱/姓名" style="width:45%;margin-right:5%"/>
+                    <el-button size="mini" @click="retrieve">检索</el-button>
                 </template>
                 <template slot-scope="scope">
                     <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                    <el-button size="mini" v-if="scope.row.id!=1" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -72,10 +69,20 @@ import * as API from '@/api/admin'
                 this.refresh = false
             },
             loadPage(i){
+                this.form.email = this.userName = this.search
                 this.form.offset = this.pageSize*(i-1)
                 this.getUserList()
                 this.form = {}
                 this.currentPage = i
+                this.resetAntPaginationItem()
+            },
+            resetAntPaginationItem(){
+                for(let i = 0;i<document.getElementsByClassName("ant-pagination-item").length;i++){
+                    document.getElementsByClassName("ant-pagination-item")[i].classList.remove("ant-pagination-item-active")
+                }
+                if(document.getElementsByClassName("ant-pagination-item").length!=0){
+                    document.getElementsByClassName("ant-pagination-item")[this.currentPage-1].classList.add("ant-pagination-item-active")
+                }
             },
             toggleSelection(rows) {
                 if (rows) {
@@ -117,22 +124,28 @@ import * as API from '@/api/admin'
                 return Y + M + D + h + m + s;
             },
             retrieve(){
-                this.form.email = this.form.userName = this.search
-                this.loadPage(this.currentPage)
+                this.loadPage(1)
+                for(let i = 0;i<document.getElementsByClassName("ant-pagination-item").length;i++){
+                    document.getElementsByClassName("ant-pagination-item")[i].classList.remove("ant-pagination-item-active")
+                }
+                if(document.getElementsByClassName("ant-pagination-item").length!=0){
+                    document.getElementsByClassName("ant-pagination-item")[0].classList.add("ant-pagination-item-active")
+                }
             },
             getUserList(){
-                this.form.userType = "normal"
+                this.form.permissionsType = "normal"
                 API.userList(this.form).then(res =>{
                     if(res.code == 0){
-                        if (res.count == 0){
-                            this.users = this.users.filter(data => false)
+                        if (res.data != null){
+                            res.data.forEach(element => {
+                                element.created_at = this.unix(element.created_at)
+                                element.permissions = "normal"
+                            });
+                            this.users = res.data
+                        }else{
+                            this.users = []
                             return
                         }
-                        res.data.forEach(element => {
-                            element.created_at = this.unix(element.created_at)
-                            element.permissions = "normal"
-                        });
-                        this.users = res.data
                         if(res.count > this.pageSize){
                             this.isLoading = true
                             this.count = res.count
@@ -182,8 +195,11 @@ import * as API from '@/api/admin'
             },
             delUser(){
                 let data = {"ids":this.id.join(",")}
-                    API.batchDelete(data).then(res =>{
+                    API.batchDeleteUser(data).then(res =>{
                         if(res.code == 0){
+                            if(this.users.length <= this.id.join(",").split(",").length){
+                                this.currentPage--
+                            }
                             this.loadPage(this.currentPage)
                             this.multipleSelection = []
                             this.id = []
@@ -203,6 +219,7 @@ import * as API from '@/api/admin'
                             type:"error",
                             title:"请求失败",
                         })
+                        console.log(e);
                     })
             }
             

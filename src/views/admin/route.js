@@ -30,6 +30,18 @@ const routes = [{
     meta: { keepAlive: true },
     component: () =>
         import ( /* webpackChunkName: "about" */ './VideoNormalList.vue'),
+}, {
+    path: '/videoAuditList',
+    name: 'VideoAuditList',
+    meta: { keepAlive: true },
+    component: () =>
+        import ( /* webpackChunkName: "about" */ './VideoAuditList.vue'),
+}, {
+    path: '/postVideo',
+    name: 'PostVideo',
+    meta: { keepAlive: true },
+    component: () =>
+        import ( /* webpackChunkName: "about" */ './PostVideo.vue'),
 }, ]
 
 const router = new VueRouter({

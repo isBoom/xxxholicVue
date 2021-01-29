@@ -82,7 +82,7 @@ export default {
     }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
 .history{
     .left{
         width: 15%;
@@ -128,15 +128,16 @@ export default {
             &:hover{
                 color:#00a1d6
             }
-            margin-top: 10%;
+            margin-top: 40px;
             .el-avatar{
                 width: 30px;
                 height: 30px;
+                float: left;
             }
             .uv{
-                position: relative;
-                top: -27px;
-                left: 10%;
+                float: left;
+                margin-top: 10px;
+                margin-left: 20px;
             }
         }
     }

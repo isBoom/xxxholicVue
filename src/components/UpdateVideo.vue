@@ -1,7 +1,7 @@
 <template>
-    <el-dialog :visible.sync="visible" title="更新视频信息(提交后将会重新被审核)" width="600px" :before-close="modalClose" center  :close-on-click-modal="false"
+    <el-dialog :visible.sync="visible" :title="title" width="600px" :before-close="modalClose" center  :close-on-click-modal="false"
         :close-on-press-escape="false" >
-        <el-form :model="form" :rules="rules" label-width="100px">
+        <el-form class="updateVideo" :model="form" :rules="rules" label-width="100px">
             <el-form-item label="视频标题" prop="title">
                 <el-input v-model="form.title"></el-input>
             </el-form-item>
@@ -19,6 +19,11 @@
             <el-form-item label="视频类型">
                 <el-select v-model="form.videoType" placeholder="视频类型">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item v-if="identity" label="审核状态">
+                <el-select v-model="form.status" placeholder="审核状态">
+                    <el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -49,6 +54,18 @@ import * as API from "@/api/video/";
                         label: '其他'
                     }
                 ],
+                status:[
+                    {
+                        value: 'normal',
+                        label: '通过'
+                    }, {
+                        value: 'audit',
+                        label: '审核中'
+                    }, {
+                        value: 'refunded',
+                        label: '不通过'
+                    }
+                ],
                 value:"",
                 imageUrl:"",
                 form:{},
@@ -72,31 +89,28 @@ import * as API from "@/api/video/";
                 type: Object, 
                 default: {}
             },
+            title:{
+                type:String
+            },
+            identity:{
+                type:Boolean,
+                default:false
+            }
         },
         mounted() {
             //表单初始      
             this.form = this.videoObj
             this.imageUrl = this.form.avatar
             this.form.avatar = ""
+
+            setTimeout(() => {
+                console.log(this.form);
+            }, 1000);
         },
         methods: {
             onSumbit(){
-                API.updateVideo(this.form).then(res =>{
-                        if (res.code == 0){
-                            this.$notify({
-                                title: "更新成功 请等待审核",
-                                type: "success"
-                            });
-                        }else{
-                            this.$notify({
-                                title: "更新失败",
-                                type: "error"
-                            });
-                        }
-                    this.$emit('refresh-data', true);
-                    //和catch里面的modalClose一起放onSumbit最后一句会导致emit无论如何无法运行 只能写两次
-                    this.modalClose()
-                }).catch(e=>{this.modalClose()}) 
+                this.$emit('update-data', this.form);
+                this.modalClose()
             },
             fnBeforeUpload(file) {
                 const isJPG = file.type === "image/jpeg" || file.type === "image/png";
@@ -107,7 +121,7 @@ import * as API from "@/api/video/";
                 if (!isLt2M) {
                     this.$message.error("上传头像图片大小不能超过 2MB!");
                 }
-                    return isJPG && isLt2M;
+                return isJPG && isLt2M;
             },
             fnUploadRequest(option) {
                 API.postUploadTokenAvatar(option.file.name)
@@ -134,20 +148,6 @@ import * as API from "@/api/video/";
                     });
                 });
             },
-            
-            // 信息提交
-            // submitForm(formName, formData) {
-            //     this.$refs[formName].validate((valid) => {
-            //         if (valid) {
-            //            //判断modalObj中id是否为空，决定是编辑还是添加请求操作；
-            //            this.modalClose(); 
-            //         } else {
-            //            //验证失败处理
-            //             return false;
-            //         }
-            //     });
-            // },
-            // 关闭弹出框
             modalClose() {
                 this.$emit('update:visible', false); // 直接修改父组件的属性 
             }
@@ -155,32 +155,36 @@ import * as API from "@/api/video/";
     };
 </script>
 <style lang="scss">
-.el-upload__input{
+.updateVideo{
+    .el-upload__input{
         display: none !important;
     }
-.avatarUploader{
-    .avatar{
-        width: 200px;
-        height: 112.5px;
-        display: block;
+    .avatarUploader{
+        .avatar{
+            width: 200px;
+            height: 112.5px;
+            display: block;
+        }
+        .el-upload{
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            width: 200px;
+            height: 112.5px;
+        }
+        .avatarUploaderIcon{
+            font-size: 28px;
+            color: #8c939d;
+            width: 200px;
+            height: 112.5px;
+            line-height: 112.5px;
+            text-align: center;
+        }
     }
-    .el-upload{
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
+    .el-upload:hover {
+        border-color: #409eff;
     }
-    .avatarUploaderIcon{
-        font-size: 28px;
-        color: #8c939d;
-        width: 200px;
-        height: 112.5px;
-        line-height: 112.5px;
-        text-align: center;
-    }
-}
-.el-upload:hover {
-    border-color: #409eff;
 }
 </style>
