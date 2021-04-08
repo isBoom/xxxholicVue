@@ -25,6 +25,7 @@
             <!-- <el-button @click="toggleSelection([users[1], users[2]])">切换第二、第三行的选中状态</el-button> -->
             <el-button @click="batchDelete()" :disabled="multipleSelection.length==0" type="danger">批量删除</el-button>
             <el-button @click="toggleSelection()" >取消选择</el-button>
+            <el-button @click="loadPage(0)" >强制刷新数据</el-button>
         </div>
         <div v-if="isLoading" class="pagination">
             <v-pagination show-quick-jumper @change="loadPage" :pageSize="pageSize" :total="count"></v-pagination>

@@ -204,7 +204,7 @@ export default {
 .el-avatar--circle{
   position: relative;
   top: -7px;
-  font-size: 18px !important;
+  font-size: 20px !important;
 }
 .el-menu.el-menu--horizontal {
   border-bottom: solid 0px #e6e6e6 !important;

@@ -2,8 +2,7 @@
   <div class="video">
     <div v-if="JSON.stringify(videoInfo) != '{}'" class="videoInfo">
       <div class="videoTitle">{{videoInfo.title}}</div>
-      <div class="videoCreateTime">{{unix(videoInfo.created_at)}}</div>
-      <div class="videoView">{{"播放:"+videoInfo.view}}</div>
+      <div class="videoCreateTimeAndView">{{"播放:"+videoInfo.view+"\xa0\xa0\xa0\xa0"}}{{unix(videoInfo.created_at)}}</div>
     </div>
     <div class="videoPlayerBox">
       <video-player
@@ -17,12 +16,12 @@
     <div class="videoInfoLong">
       <div>{{videoInfo.info}}</div>
     </div>
-    <hr align="left" width="79%" style="opacity:0.5" />
+    <hr align="left" width="79%" style="opacity:0.5;margin-bottom:20px" />
     <div style="width:80%">
       <el-row>
         <el-col :span="2">
           <div class="commentAvatar me">
-            <el-avatar :src="user.avatar">{{user.userName}}</el-avatar>
+            <el-avatar :src="user.avatar">{{user.userName.charAt(0)}}</el-avatar>
           </div>
         </el-col>
         <el-col :span="19">
@@ -51,7 +50,7 @@
       <el-row>
         <el-col :span="2">
           <div class="commentAvatar">
-            <el-avatar :src="c.user.avatar">{{user.userName}}</el-avatar>
+            <el-avatar :src="c.user.avatar">{{user.userName.charAt(0)}}</el-avatar>
           </div>
         </el-col>
         <el-col :span="22" style="border-top:1px solid rgba(0, 0, 0, 0.2)">
@@ -74,15 +73,15 @@
             <el-row>
               <el-col :span="1">
                 <div class="commentAvatar">
-                  <el-avatar :src="cc.user.avatar">{{user.userName}}</el-avatar>
+                  <el-avatar :src="cc.user.avatar">{{user.userName.charAt(0)}}</el-avatar>
                 </div>
               </el-col>
               <el-col :span="23">
                 <div style="width:100%" class="commentUsername">
-                  {{cc.user.userName}}
+                  {{user.userName}}
                   <font v-if="cc.parentId!=cc.firstId" class="commentContent">
-                    回复@{{" "}}
-                    <font style="color:#409EFF">{{cc.parentUser.userName}}</font>
+                    回复
+                    <font style="color:#409EFF">{{"@"+cc.parentUser.userName}}</font>
                     {{" :"}}
                   </font>
                   <font class="commentContent">{{cc.content}}</font>
@@ -112,7 +111,7 @@
             <el-row>
               <el-col :span="2">
                 <div class="commentAvatar me">
-                  <el-avatar :src="user.avatar">{{user.userName}}</el-avatar>
+                  <el-avatar :src="user.avatar">{{user.userName.charAt(0)}}</el-avatar>
                 </div>
               </el-col>
               <el-col :span="19">
@@ -207,20 +206,24 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-          let data = {};
-          data.id = c.id;
-          data.parentId = c.parentId;
-          data.videoId = c.videoId;
+          let data = {
+            id:c.id,
+            parentId:c.parentId,
+            videoId: c.videoId,
+          };
           API.delComments(data)
             .then(res => {
               if (res.code == 0) {
+                //根评论
                 if (c.parentId == 0) {
-                  let index = this.comments.indexOf(c);
-                  if (index != -1) {
+                  //删除根评论
+                  let  index = this.comments.indexOf(c)
+                  if ( index!= -1) {
                     this.comments.splice(index, 1);
                   }
                 } else {
                   //暂有bug
+                  //获取父评论
                   let obj = this.getParentObjectById(this.comments, c.id);
                   let index = obj.child.indexOf(c);
                   if (index != -1) {
@@ -457,18 +460,23 @@ body {
     /* 视频详情 */
     .videoTitle {
         margin-top: 1em;
-        font-weight: 345;
+      font-weight: 400;
+      font-size: 18px;
+      color: #212121 !important;
     }
-    .videoCreateTime,.videoView {
-      color: #b39999;
-      line-height: 15px;
-      height: 15px;
-      margin-bottom: 1px;
-      font-size: 0.65em;
+    .videoCreateTimeAndView{
+      color: #999999;
+      line-height: 30px;
+      height: 30px;
+      font-size:12px;
+      font-weight: 400;
     }
     .videoInfoLong {
         font-weight: 400;
-        font-size: 0.7em;
+        font-size: 16px;
+        white-space: pre-wrap;
+        margin-top: 20px;
+        margin-bottom: 10px;
     }
     .commentBox {
       margin-bottom: 10px;

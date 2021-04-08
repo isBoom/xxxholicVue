@@ -145,14 +145,38 @@ export default {
                 });
         },
         videoInfo(v) {
-            window.open(`/video/${v.id}`,'_self')
+            window.open(`/#/video/${v.id}`,'_self')
+            //时间长了都忘了 我写的多页面vue 这不在一个路由下 不用push用open
+            //this.$router.push({ path: `/#/video/${v.id}` });
         },
         updateVideo(v){
             this.showUpdateVideo = true
             this.videoObj = JSON.parse(JSON.stringify(v))
         },
         delVideo(v){
-            console.log(v);
+            let data = {
+                "ids":""+v.id,
+            }
+            API.delVideo(data).then(res => {
+                this.$confirm('确认操作？', '警告', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    if (res.code == 0) {
+                        for(let i = 0; i < this.videos.length;i++){
+                            if(this.videos[i].id == v.id){
+                                this.videos.splice(i,1)
+                                return
+                            }
+                        }
+                    } else {
+                        this.$message.error(res.msg)
+                    }})
+                    .catch(err => {
+                        this.$message.error("服务器开小差啦，请您稍后再试")
+                });
+                }).catch(() => {});   
         },
     },
     

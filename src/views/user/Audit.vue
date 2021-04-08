@@ -1,8 +1,9 @@
 <template>
     <div class="videoBox">
+        <VideoPlay v-if="showVideoPlay" :visible.sync="showVideoPlay" :videoObj='videoObj'/>
         <div class="braceVideoBox"></div>
             <el-row :gutter="10" ref="boxHeight">
-            <el-col :span="4" v-for="v in videos" :key="v.id" @click.native="videoInfo(v)">
+            <el-col :span="4" v-for="v in videos" :key="v.id" @click.native="videoPlay(v)">
                 <!-- 大盒子强行宽高比 home-el-col-big -->
                 <div class="coverBoxBig">
                     <div class="coverBoxSmall">
@@ -48,7 +49,9 @@
 </template>
 <script>
 import * as API from "@/api/video/";
+import VideoPlay from "@/components/VideoPlay.vue"
 export default {
+    components:{VideoPlay},
     data() {
         return {
             boxHeightChange:"",
@@ -62,13 +65,20 @@ export default {
                 limit:0,
                 userId:0,
                 status:"",
-            }
+            },
+            //
+            showVideoPlay:false,
+            showUpdateVideo: false,
         };
     },
     methods: {
         loadPage(i) {
             this.videoParams.offset = this.pageSize * (i-1)
             this.getVideos(this.videoParams)
+        },
+        videoPlay(b){
+            this.showVideoPlay = true
+            this.videoObj = JSON.parse(JSON.stringify(b))
         },
         getVideos(params) {
             API.getVideos(params)
@@ -95,6 +105,31 @@ export default {
                     type: "error"
                 });
                 });
+        },
+        delVideo(v){
+            let data = {
+                "ids":""+v.id,
+            }
+            API.delVideo(data).then(res => {
+                this.$confirm('确认操作？', '警告', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    if (res.code == 0) {
+                        for(let i = 0; i < this.videos.length;i++){
+                            if(this.videos[i].id == v.id){
+                                this.videos.splice(i,1)
+                                return
+                            }
+                        }
+                    } else {
+                        this.$message.error(res.msg)
+                    }})
+                    .catch(err => {
+                        this.$message.error("服务器开小差啦，请您稍后再试")
+                });
+                }).catch(() => {});   
         },
         videoInfo(v) {
             //window.open(`/#/video/${v.id}`,'_self')
