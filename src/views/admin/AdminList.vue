@@ -77,7 +77,6 @@ import * as API from '@/api/admin'
                 }
             },
             toggleSelection(rows) {
-                console.log(">>>>");
                 if (rows) {
                 rows.forEach(row => {
                     this.$refs.multipleTable.toggleRowSelection(row);
