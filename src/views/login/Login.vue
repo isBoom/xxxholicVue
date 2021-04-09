@@ -35,8 +35,20 @@ export default {
     };
   },
   methods: {
+    checkInput(){
+      console.log();
+      if (!this.form.email || this.form.email.length < 2 ||  this.form.email.length > 12 ) {
+        this.$message.warning("用户名非法");
+      } else if (!this.form.password) {
+        this.$message.warning("密码不能为空");
+      } else{
+        return true
+      }
+      return false
+    },
     onLogin() {
-      API.postLogin(this.form)
+      if(this.checkInput()) {
+        API.postLogin(this.form)
         .then(res => {
           console.log(res);
           if (res.code == 0){
@@ -68,6 +80,7 @@ export default {
             type: "error"
           });
         });
+      }
     }
   }
 };
