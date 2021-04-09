@@ -87,6 +87,7 @@ export default {
     //   }
     // },
     checkInput(){
+      console.log();
       var strRegex = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
       if (!strRegex.test(this.form.email) || !this.form.email) {
         this.$message.warning("邮箱非法");
@@ -102,7 +103,7 @@ export default {
         this.$message.warning("两次密码不一致");
       } else if (this.code == ""){
         this.$message.warning("验证码为空");
-      }else if (this.identifyCode.toLocaleLowerCase !=this.code.toLocaleLowerCase){
+      }else if (this.identifyCode.toLocaleLowerCase() !=this.code.toLocaleLowerCase()){
         this.code=""
         this.refreshCode()
         this.$message.warning("请输入正确的验证码");
@@ -115,7 +116,6 @@ export default {
       if(this.checkInput()) {
         API.postRregister(this.form)
           .then(res => {
-            console.log(res);
             if (res.code > 0) {
               this.$notify.error({
                 title: "注册失败",
