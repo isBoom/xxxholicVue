@@ -156,7 +156,7 @@ export default {
             img{
                 height: 100%;
                 position: relative;
-                right: 40%;
+               //right: 40%;
             }
         }
         .avatarUploaderIcon{

@@ -26,7 +26,7 @@
                 <el-menu-item>
                   <el-dropdown>
                     <span class="elDropdownLink">
-                      <el-avatar :src="user.avatar">{{user.userName.charAt(0)}}</el-avatar>
+                      <el-avatar :src="user.avatar">{{(user.userName==undefined||user.userName==null||user.userName=="")?"头像":user.userName.charAt(0)}}</el-avatar>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item class="clearfix" @click.native="myVideo">个人中心</el-dropdown-item>

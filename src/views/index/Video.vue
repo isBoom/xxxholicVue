@@ -21,7 +21,7 @@
       <el-row>
         <el-col :span="2">
           <div class="commentAvatar me">
-            <el-avatar :src="user.avatar">{{user.userName.charAt(0)}}</el-avatar>
+            <el-avatar :src="user.avatar">{{(user.userName==undefined||user.userName==null||user.userName=="")?"头像":user.userName.charAt(0)}}</el-avatar>
           </div>
         </el-col>
         <el-col :span="19">
@@ -50,7 +50,7 @@
       <el-row>
         <el-col :span="2">
           <div class="commentAvatar">
-            <el-avatar :src="c.user.avatar">{{user.userName.charAt(0)}}</el-avatar>
+            <el-avatar :src="c.user.avatar">{{(c.user.userName==undefined||c.user.userName==null||c.user.userName=="")?"头像":c.user.userName.charAt(0)}}</el-avatar>
           </div>
         </el-col>
         <el-col :span="22" style="border-top:1px solid rgba(0, 0, 0, 0.2)">
@@ -73,12 +73,12 @@
             <el-row>
               <el-col :span="1">
                 <div class="commentAvatar">
-                  <el-avatar :src="cc.user.avatar">{{user.userName.charAt(0)}}</el-avatar>
+                  <el-avatar :src="cc.user.avatar">{{(cc.user.userName==undefined||cc.user.userName==null||cc.user.userName=="")?"头像":cc.user.userName.charAt(0)}}</el-avatar>
                 </div>
               </el-col>
               <el-col :span="23">
                 <div style="width:100%" class="commentUsername">
-                  {{user.userName}}
+                  {{cc.user.userName}}
                   <font v-if="cc.parentId!=cc.firstId" class="commentContent">
                     回复
                     <font style="color:#409EFF">{{"@"+cc.parentUser.userName}}</font>
@@ -89,12 +89,7 @@
                 <div style="width:100%" class="commentTime">
                   {{unix(cc.createdAt)}}
                   <font class="replyButton" @click="showCommentBox(c,cc)">回复</font>
-                  <el-dropdown
-                    trigger="hover"
-                    class="el-icon-more-box"
-                    style="display:none"
-                    v-if="cc.user.id==user.id"
-                  >
+                  <el-dropdown trigger="hover" class="el-icon-more-box" style="display:none" v-if="cc.user.id==user.id">
                     <span class="el-dropdown-link">
                       <i class="el-icon-more"></i>
                     </span>
@@ -111,7 +106,7 @@
             <el-row>
               <el-col :span="2">
                 <div class="commentAvatar me">
-                  <el-avatar :src="user.avatar">{{user.userName.charAt(0)}}</el-avatar>
+                  <el-avatar :src="user.avatar">{{(user.userName==undefined||user.userName==null||user.userName=="")?"头像":user.userName.charAt(0)}}</el-avatar>
                 </div>
               </el-col>
               <el-col :span="19">
@@ -492,7 +487,7 @@ body {
         width: 70%;
         height: 70%;
         margin-top: 15%;
-        line-height: 50px;
+        line-height: 52px;
       }
     }
     .commentUsername {
@@ -523,8 +518,8 @@ body {
           width: 40px;
           span {
             margin-top: 10%;
-            line-height: 30px;
-            font-size: 0.5em;
+            line-height: 26px;
+            font-size: 14px !important;
           }
         }
         .commentContent {

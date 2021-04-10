@@ -183,7 +183,7 @@ import * as userAPI from "@/api/video/";
             img{
                 height: 100%;
                 position: relative;
-                right: 40%;
+                //right: 40%
             }
         }
         .avatarUploaderIcon{
