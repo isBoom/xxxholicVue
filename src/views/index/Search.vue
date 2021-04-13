@@ -95,7 +95,7 @@ export default {
     },
     created(){
         this.videoParams.limit=this.pageSize,
-        this.videoParams.info = this.$route.query.info
+        this.videoParams.info = this.videoParams.title = this.$route.query.info
         console.log(this.videoParams);
         this.getVideos(this.videoParams)
     }
