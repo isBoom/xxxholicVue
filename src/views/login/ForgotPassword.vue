@@ -77,7 +77,7 @@ export default {
         },
         getCaptcha(){
             var strRegex = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
-            if(strRegex.test(this.form.email) && !this.form.email){
+            if(strRegex.test(this.form.email) && this.form.email){
                 API.getCaptcha({"email":this.form.email}).then(res => {
                     if(res.code == 0 ){
                         this.$notify({
