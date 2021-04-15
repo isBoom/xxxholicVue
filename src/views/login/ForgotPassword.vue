@@ -76,7 +76,8 @@ export default {
             }
         },
         getCaptcha(){
-            if(this.email!=""){
+            var strRegex = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+            if(strRegex.test(this.form.email) && !this.form.email){
                 API.getCaptcha({"email":this.form.email}).then(res => {
                     if(res.code == 0 ){
                         this.$notify({
@@ -110,7 +111,7 @@ export default {
                     });
                 });
             }else{
-                this.$message.warning("请输入邮箱");
+                this.$message.warning("邮箱非法");
             }
         },
         checkInput(){
