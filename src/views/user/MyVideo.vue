@@ -157,26 +157,26 @@ export default {
             let data = {
                 "ids":""+v.id,
             }
-            API.delVideo(data).then(res => {
-                this.$confirm('确认操作？', '警告', {
+            this.$confirm('确认操作？', '警告', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    if (res.code == 0) {
-                        for(let i = 0; i < this.videos.length;i++){
-                            if(this.videos[i].id == v.id){
-                                this.videos.splice(i,1)
-                                return
+                    API.delVideo(data).then(res => {
+                        if (res.code == 0) {
+                            for(let i = 0; i < this.videos.length;i++){
+                                if(this.videos[i].id == v.id){
+                                    this.videos.splice(i,1)
+                                    return
+                                }
                             }
-                        }
-                    } else {
-                        this.$message.error(res.msg)
-                    }})
-                    .catch(err => {
+                        } else {
+                            this.$message.error(res.msg)
+                        }}).catch(err => {
                         this.$message.error("服务器开小差啦，请您稍后再试")
-                });
-                }).catch(() => {});   
+                    }).catch(() => {});    
+            });
+            
         },
     },
     
