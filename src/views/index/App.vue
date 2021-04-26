@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-   <HomeMenuBg />
+   <!-- <HomeMenuBg /> -->
     <HomeMenu />
     <!-- <div v-text="$store.state.exclude"></div> -->
     <div class="appContent">

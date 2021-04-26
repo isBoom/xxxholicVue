@@ -132,7 +132,8 @@ export default {
   width: 100%;
   min-width: 1450px;
   border-bottom: solid 0px #e6e6e6;
-  height: 155px;
+  height: 70px;
+  //height: 155px;
   //
   .homeMenu {
     margin-bottom: 30px;
@@ -149,7 +150,7 @@ export default {
       .el-menu-item {
         font-size: 14px;
         padding: 0 10px;
-        color: #fff;
+        color: #212121;
         text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
         white-space: nowrap;
         display: -ms-flexbox;
