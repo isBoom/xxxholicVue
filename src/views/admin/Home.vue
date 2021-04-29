@@ -21,9 +21,10 @@
                             <span>资源管理</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="videoNormalList">已通过</el-menu-item>
-                            <el-menu-item index="videoAuditList">审核中</el-menu-item>
+                            <el-menu-item index="videoNormalList">视频信息</el-menu-item>
+                            <el-menu-item index="videoAuditList">审核中视频</el-menu-item>
                             <el-menu-item index="postVideo">发布视频</el-menu-item>
+                            <el-menu-item index="comments">评论信息</el-menu-item>
                         </el-menu-item-group>
                         </el-submenu>
                     <el-submenu index="3">

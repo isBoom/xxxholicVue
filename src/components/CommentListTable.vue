@@ -1,27 +1,27 @@
 <template>
-    <div class="videoListTable">
-        <UpdateVideo v-if="showUpdateVideo" :visible.sync="showUpdateVideo" 
-        @update-data="(data)=>{$emit('update-video',data)}" :title="title" :videoObj='videoObj'
-        :identity=true />
-        <VideoPlay v-if="showVideoPlay" :visible.sync="showVideoPlay" :videoObj='videoObj'/>
+    <div class="commmentListTable">
         <!-- <UpdateUser v-if="showUpdateUser" :visible.sync="showUpdateUser"  @refresh-data="refreshData" :userObj='userObj'></UpdateUser> -->
-        <el-table ref="multipleTable" :data="videos" border stripe tooltip-effect="dark" style="width: 100%;"
+        <el-table ref="multipleTable" :data="comments" border stripe tooltip-effect="dark" style="width: 100%;"
             @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column label="ID" width="40" show-overflow-tooltip prop="id"></el-table-column>
-            <el-table-column label="创建日期" width="160" show-overflow-tooltip prop="created_at"></el-table-column>
-            <el-table-column prop="user.userName" width="120" label="用户姓名" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="title" label="标题" show-overflow-tooltip ></el-table-column>
-            <el-table-column prop="info" label="简介" show-overflow-tooltip ></el-table-column>
-            <el-table-column prop="videoType" width="80" label="视频类型" show-overflow-tooltip></el-table-column>
+            <el-table-column label="创建日期" width="160" show-overflow-tooltip prop="createdAt"></el-table-column>
+            <el-table-column label="视频ID" width="70" prop="videoId" show-overflow-tooltip ></el-table-column>
+            <el-table-column label="视频详情"  width="80" >
+                <template slot-scope="scope">
+                    <el-button size="mini" @click="handlePlay(scope.$index, scope.row)">查看</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column label="用户id"  prop="userId" width="70" show-overflow-tooltip></el-table-column>
+            <el-table-column label="父评论id" prop="parentId" width="80"></el-table-column>
+            <el-table-column label="根评论id" prop="firstId" width="80"></el-table-column>
+            <el-table-column label="内容"prop="content" min-width="320"  show-overflow-tooltip ></el-table-column>
             <el-table-column width="210">
                 <template slot="header" slot-scope="scope"><div v-if="false">{{scope}}</div>
-                    <el-button size="mini" @click="retrieve" style="width:100%">检索</el-button>
-                    <el-input v-model="config.search" size="mini" placeholder="用户名/标题/详情" style="width:100%"/>
+                    <el-input v-model="config.search" size="mini" placeholder="评论内容" style="width:45%;margin-right:5%"/>
+                    <el-button size="mini" @click="retrieve">检索</el-button>
                 </template>
                 <template slot-scope="scope">
-                    <el-button size="mini" @click="handlePlay(scope.$index, scope.row)">播放</el-button>
-                    <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                     <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
@@ -37,13 +37,12 @@
     </div>
 </template>
 <script>
-import UpdateVideo from "@/components/UpdateVideo.vue"
-import VideoPlay from "@/components/VideoPlay.vue"
+import UpdateVideo from "@/components/UpdateVideo.vue";
+import VideoPlay from "@/components/VideoPlay.vue";
 export default {
     components:{UpdateVideo,VideoPlay},
     data() {
         return {
-            title:"更新视频信息",
             isLoading:false,
             batchDeleteDisabled:true,
             multipleSelection: [],
@@ -55,7 +54,7 @@ export default {
         };
     },
     watch:{
-        // videoList:{
+        // commentList:{
         //     handler(e){
         //         console.log(e);
         //     },
@@ -83,7 +82,7 @@ export default {
         }
     },
     props:{
-        videos:{
+        comments:{
             type:Array,
             default:()=>[]
         },
@@ -105,11 +104,12 @@ export default {
         },
         handleEdit(a,b){
             this.showUpdateVideo = true
-            this.videoObj = JSON.parse(JSON.stringify(b))
+            this.commentObj = JSON.parse(JSON.stringify(b))
         },
         handlePlay(a,b){
-            this.showVideoPlay = true
-            this.videoObj = JSON.parse(JSON.stringify(b))
+            // this.showVideoPlay = true
+            // this.commentObj = JSON.parse(JSON.stringify(b))
+            window.open(`/#/video/${b.videoId}`,'_blank')
         },
         batchDelete(){
             this.$confirm('确认操作？', '警告', {
@@ -145,23 +145,36 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
+        unix(row) {
+            let date = new Date(row * 1000);
+            let Y = date.getFullYear() + "-";
+            let M =
+                date.getMonth() + 1 < 10
+                ? "0" + (date.getMonth() + 1) + "-"
+                : date.getMonth() + 1 + "-";
+            let D =
+                date.getDate() < 10 ? "0" + date.getDate() + " " : date.getDate() + " ";
+            let h =
+                date.getHours() < 10
+                ? "0" + date.getHours() + ":"
+                : date.getHours() + ":";
+            let m =
+                date.getMinutes() < 10
+                ? "0" + date.getMinutes() + ":"
+                : date.getMinutes() + ":";
+            let s =
+                date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            return Y + M + D + h + m + s;
+        },
     },
     
     mounted(){
-        // var that = this
-        // setTimeout(function(){
-        //     console.log(that.videoList);
-        // },1000)
-        // this.videoParams.status = "normal"
-        // this.videoParams.userId = 1
-        // this.videoParams.limit=this.pageSize,
-        // this.videoParams.info = this.$route.query.info
-        // this.getVideos(this.videoParams)
+
     }
 }
 </script>
-<style lang="scss" scoped>
-.videoListTable{
+<style  lang="scss"scoped>
+.commmentListTable{
     position: relative;
     .pagination{
         position: absolute;

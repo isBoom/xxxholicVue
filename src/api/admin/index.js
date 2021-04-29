@@ -11,6 +11,8 @@ const createUser = data => axios.post(`/apis/api/v1/admin/user/create`, data).th
 const videoList = data => axios.get(`/apis/api/v1/admin/videos?${qs.stringify(data)}`).then(res => res.data)
 const batchDeleteVideo = data => axios.delete(`/apis/api/v1/admin/video/delVideo`, { data: data }).then(res => res.data)
 const updateVideo = form => axios.post(`/apis/api/v1/admin/video/updateVideo`, form).then(res => res.data)
+const commentList = form => axios.get(`/apis/api/v1/admin/video/commentList?${qs.stringify(form)}`).then(res => res.data)
+const batchDeleteComments = data => axios.delete(`/apis/api/v1/admin/video/delComment`, { data: data }).then(res => res.data)
 export {
     userList,
     //adminList,
@@ -22,4 +24,6 @@ export {
     videoList,
     batchDeleteVideo,
     updateVideo,
+    commentList,
+    batchDeleteComments
 }
